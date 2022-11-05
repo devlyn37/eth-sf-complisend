@@ -3,35 +3,17 @@
 //
 // When running the script with `hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
-import fs from 'fs';
-import { config, ethers } from 'hardhat';
+import fs from "fs";
+import { config, ethers } from "hardhat";
 
 async function main() {
-  // Hardhat always runs the compile task when running scripts with its command
-  // line interface.
-  //
-  // If this script is run directly using `node` you may want to call compile
-  // manually to make sure everything is compiled
-  // await hre.run('compile');
-
-  // fs.unlinkSync(`${config.paths.artifacts}/contracts/contractAddress.ts`);
-
-  // We get the contract to deploy
-  const YourContract = await ethers.getContractFactory('YourContract');
-  const contract = await YourContract.deploy();
-  await contract.deployed();
-  console.log('YourContract deployed to:', contract.address);
-
-  const YourNFT = await ethers.getContractFactory('YourNFT');
-  const YourNFTContract = await YourNFT.deploy();
-  await YourNFTContract.deployed();
-  console.log('YourNFT deployed to:', YourNFTContract.address);
-  saveFrontendFiles(
-    contract.address,
-    'YourContract',
-    YourNFTContract.address,
-    'YourNFTContract'
+  const WrappedTokenFactory = await ethers.getContractFactory("WrappedToken");
+  const wrappedToken = await WrappedTokenFactory.deploy(
+    ethers.constants.AddressZero
   );
+  await wrappedToken.deployed();
+
+  console.log("Wrapped Token deployed to", wrappedToken.address);
 }
 
 // https://github.com/nomiclabs/hardhat-hackathon-boilerplate/blob/master/scripts/deploy.js

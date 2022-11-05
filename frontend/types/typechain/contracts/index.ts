@@ -5,5 +5,3 @@ import type * as mock from "./mock";
 export type { mock };
 export type { IBalanceOf } from "./IBalanceOf";
 export type { WrappedToken } from "./WrappedToken";
-export type { YourContract } from "./YourContract";
-export type { YourNFT } from "./YourNFT";
