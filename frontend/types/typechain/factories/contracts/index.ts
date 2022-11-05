@@ -4,5 +4,3 @@
 export * as mock from "./mock";
 export { IBalanceOf__factory } from "./IBalanceOf__factory";
 export { WrappedToken__factory } from "./WrappedToken__factory";
-export { YourContract__factory } from "./YourContract__factory";
-export { YourNFT__factory } from "./YourNFT__factory";
