@@ -94,8 +94,7 @@ const Home: NextPage = () => {
       const conversation = await client?.conversations.newConversation(
         getAddress(recipient)
       )
-      const messages = await conversation.messages()
-      const result = await conversation.send('gm')
+      const result = await conversation.send(`hash: ${data.transactionHash}`)
       console.log(result)
       toast({
         title: 'Transaction Successful',
