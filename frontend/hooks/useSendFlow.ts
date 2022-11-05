@@ -2,11 +2,12 @@ import { BigNumber, ethers } from 'ethers'
 import { useMemo } from 'react'
 import {
   useAccount,
+  useContractRead,
   useContractWrite,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi'
-const WRAPPED_TOKEN_ABI = require('../../artifacts/contracts/WrappedToken.sol/WrappedToken.json')
+const WRAPPED_TOKEN_ABI = require('../artifacts/contracts/WrappedToken.sol/WrappedToken.json')
 
 // WETH in Goerli
 // const GOERLI_CONTRACT_ADDRESS = '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6'
@@ -41,19 +42,29 @@ export function useSendFlow(
     }
   }, [recipient])
 
+  console.log(recipient)
+  console.log(amount)
+
+  const { data: erc20Id } = useContractRead({
+    address: WRAPPED_TOKEN_ADDRESS,
+    abi: WRAPPED_TOKEN_ABI.abi,
+    functionName: 'erc20TokenID',
+    args: [MOCK_TOKEN],
+  })
+
   const { config } = usePrepareContractWrite({
     address: WRAPPED_TOKEN_ADDRESS,
     abi: WRAPPED_TOKEN_ABI.abi,
-    functionName: 'lockERC20',
+    functionName: 'safeTransferFrom',
     args: [
-      // token Address
-      MOCK_TOKEN,
       // from
       address,
       // to
       recipient,
+      // id
+      erc20Id,
       // amount
-      BigNumber.from(amount),
+      bigNumberAmount as BigNumber,
       // data
       ethers.utils.toUtf8Bytes('transfer'),
     ],
