@@ -31,9 +31,7 @@ const SubmitForm = ({ props }: any): any => {
       throw new Error('Did not sign xmtp messages')
     }
 
-    const conversation = await client?.conversations.newConversation(
-      getAddress(recipient)
-    )
+    const conversation = await client?.conversations.newConversation(recipient)
     const result = await conversation.send(message)
   }
 
@@ -83,7 +81,7 @@ const SubmitForm = ({ props }: any): any => {
     })
   }
 
-  const { isLoading, write, error } = useSendFlow(
+  const { isLoading, write, error, state } = useSendFlow(
     recipient,
     amount,
     onSuccess,
@@ -92,6 +90,7 @@ const SubmitForm = ({ props }: any): any => {
 
   const submit = useCallback(async () => {
     // TODO queue these all at once somehow
+    console.log('Hello?')
     await initClient()
     await write?.()
   }, [write, initClient])
@@ -124,7 +123,7 @@ const SubmitForm = ({ props }: any): any => {
             className="p-3 px-8 bg-blue-600 rounded-xl font-black"
             onClick={submit}
           >
-            SEND
+            {state}
           </Button>
         </div>
       </div>
