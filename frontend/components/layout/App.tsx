@@ -80,13 +80,27 @@ export function OverlayDialog({
   )
 }
 
-const SetTokenForm = ({ state, onSet }: any): any => {
+interface TokenState {
+  amount: number
+}
+const SetTokenForm = ({
+  state,
+  onSet,
+}: {
+  state: TokenState
+  onSet: (state: TokenState) => void
+}): any => {
   const [amount, setAmount] = useState(0)
   const [open_form, setFormOpen] = useState(false)
 
-  const onSetAmountChange = (e: any) => {
-    setAmount(e.target.value)
-  }
+  const onSetAmountChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const x = Number.parseFloat(event.target.value)
+
+      setAmount(Number.isNaN(x) ? 0 : x)
+    },
+    []
+  )
 
   const onSubmit = (e: any) => {
     e.preventDefault()
@@ -121,8 +135,17 @@ const SetTokenForm = ({ state, onSet }: any): any => {
   )
 }
 
-const SetNotesForm = ({ state, onSet }: any): any => {
-  const [notes, setNotes] = useState(0)
+interface NotesState {
+  notes: string
+}
+const SetNotesForm = ({
+  state,
+  onSet,
+}: {
+  state: NotesState
+  onSet: (state: NotesState) => void
+}): any => {
+  const [notes, setNotes] = useState('')
   const [open_form, setFormOpen] = useState(false)
 
   const onSetNotesChange = (e: any) => {
@@ -181,13 +204,25 @@ const AuthForm = ({ props }: any): any => {
   )
 }
 
-const SetRecieverForm = ({ state = {}, onSet }: any): any => {
-  const [address, setAddress] = useState(0)
+interface AddressState {
+  address: string
+}
+const SetRecieverForm = ({
+  state,
+  onSet,
+}: {
+  state: AddressState
+  onSet: (state: AddressState) => void
+}): any => {
+  const [address, setAddress] = useState('')
   const [open_form, setFormOpen] = useState(false)
 
-  const onSetAddressChange = (e: any) => {
-    setAddress(e.target.value)
-  }
+  const onSetAddressChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setAddress(event.target.value)
+    },
+    []
+  )
 
   const onSubmit = (e: any) => {
     e.preventDefault()
@@ -246,100 +281,12 @@ export function LoaderBar({ loading }: any) {
 }
 
 const SubmitForm = ({ props }: any): any => {
-  let [token_state, setTokenState] = useState({})
-  let [reciever_state, setRecieverState] = useState({})
-  let [notes_state, setNotesState] = useState({})
+  const [token_state, setTokenState] = useState({ amount: '' })
+  const [reciever_state, setRecieverState] = useState({ address: '' })
+  const [notes_state, setNotesState] = useState({ notes: '' })
 
   let [is_sending, setIsSending] = useState(false)
 
-  let submitTransaction = function () {
-    // combine token_state & notes_state and submit
-  }
-
-  return (
-    <>
-      <div className="flex bg-slate-900 flex-col max-w-2xl w-screen p-4 rounded-md">
-        <div className="m-2">
-          <SetTokenForm
-            state={token_state}
-            onSet={setTokenState}
-          ></SetTokenForm>
-        </div>
-        <div className="m-2">
-          <SetRecieverForm
-            value={reciever_state}
-            onSet={setRecieverState}
-          ></SetRecieverForm>
-        </div>
-        <div className="m-2">
-          <SetNotesForm
-            value={notes_state}
-            onSet={setNotesState}
-          ></SetNotesForm>
-        </div>
-
-        <div className="w-full p-4 flex items-center justify-center">
-          <button
-            className="p-3 px-8 bg-blue-600 rounded-xl font-black"
-            onClick={submitTransaction}
-          >
-            SEND
-          </button>
-        </div>
-      </div>
-      <OverlayDialog show={false}>
-        <LoaderBar> </LoaderBar>
-        <div className="p-2">sending....</div>
-      </OverlayDialog>
-    </>
-  )
-}
-
-const Trx = ({ props }: any): any => {
-  return (
-    <div className="flex p-2 rounded-md bg-slate-900 m-2">trx goes here</div>
-  )
-}
-
-const TrxList = ({ props }: any): any => {
-  const [filter, setFilter] = useState('sent')
-
-  let trx_list: any = []
-
-  return (
-    <div>
-      <div className="flex flex-row rounded-xl font-black bg-blue-500 m-2 overflow-hidden items-stretch content-stretch cursor-pointer">
-        <div
-          onClick={setFilter.bind(null, 'sent')}
-          className={
-            'h-full p-2 px-5 ' +
-            cn({
-              'bg-slate-700': filter != 'sent',
-              'bg-blue-500': filter == 'sent',
-            })
-          }
-        >
-          sent
-        </div>
-        <div
-          onClick={setFilter.bind(null, 'received')}
-          className={
-            'h-full p-2 px-5 ' +
-            cn({
-              'bg-slate-700': filter != 'received',
-              'bg-blue-500': filter == 'received',
-            })
-          }
-        >
-          recieved
-        </div>
-      </div>
-      {trx_list}
-    </div>
-  )
-}
-
-export const App = ({ customMeta }: LayoutProps): JSX.Element => {
   // merging
 
   const { address } = useAccount()
@@ -441,22 +388,6 @@ export const App = ({ customMeta }: LayoutProps): JSX.Element => {
     },
   })
 
-  const handleRecipientChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setRecipient(event.target.value)
-    },
-    []
-  )
-
-  const handleAmountChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const x = Number.parseFloat(event.target.value)
-
-      setAmount(Number.isNaN(x) ? 0 : x)
-    },
-    []
-  )
-
   const onClick = useCallback(async () => {
     // TODO queue these all at once somehow
     await initClient()
@@ -465,6 +396,94 @@ export const App = ({ customMeta }: LayoutProps): JSX.Element => {
 
   // end merging
 
+  let submitTransaction = function () {
+    // combine token_state & notes_state and submit
+  }
+
+  return (
+    <>
+      <div className="flex bg-slate-900 flex-col max-w-2xl w-screen p-4 rounded-md">
+        <div className="m-2">
+          <SetTokenForm
+            state={token_state}
+            onSet={setTokenState}
+          ></SetTokenForm>
+        </div>
+        <div className="m-2">
+          <SetRecieverForm
+            value={reciever_state}
+            onSet={setRecieverState}
+          ></SetRecieverForm>
+        </div>
+        <div className="m-2">
+          <SetNotesForm
+            value={notes_state}
+            onSet={setNotesState}
+          ></SetNotesForm>
+        </div>
+
+        <div className="w-full p-4 flex items-center justify-center">
+          <button
+            className="p-3 px-8 bg-blue-600 rounded-xl font-black"
+            onClick={submitTransaction}
+          >
+            SEND
+          </button>
+        </div>
+      </div>
+      <OverlayDialog show={false}>
+        <LoaderBar> </LoaderBar>
+        <div className="p-2">sending....</div>
+      </OverlayDialog>
+    </>
+  )
+}
+
+const Trx = ({ props }: any): any => {
+  return (
+    <div className="flex p-2 rounded-md bg-slate-900 m-2">trx goes here</div>
+  )
+}
+
+const TrxList = ({ props }: any): any => {
+  const [filter, setFilter] = useState('sent')
+
+  let trx_list: any = []
+
+  return (
+    <div>
+      <div className="flex flex-row rounded-xl font-black bg-blue-500 m-2 overflow-hidden items-stretch content-stretch cursor-pointer">
+        <div
+          onClick={setFilter.bind(null, 'sent')}
+          className={
+            'h-full p-2 px-5 ' +
+            cn({
+              'bg-slate-700': filter != 'sent',
+              'bg-blue-500': filter == 'sent',
+            })
+          }
+        >
+          sent
+        </div>
+        <div
+          onClick={setFilter.bind(null, 'received')}
+          className={
+            'h-full p-2 px-5 ' +
+            cn({
+              'bg-slate-700': filter != 'received',
+              'bg-blue-500': filter == 'received',
+            })
+          }
+        >
+          recieved
+        </div>
+      </div>
+      {trx_list}
+    </div>
+  )
+}
+
+export const App = ({ customMeta }: LayoutProps): JSX.Element => {
   return (
     <>
       <Head customMeta={customMeta} />
