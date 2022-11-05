@@ -225,6 +225,77 @@ contract WrappedToken is ERC1155, ERC1155URIStorage, Pausable, Ownable {
         );
     }
 
+    function _afterTokenTransfer(
+        address operator,
+        address from,
+        address to,
+        uint256[] memory ids,
+        uint256[] memory amounts,
+        bytes memory data
+    ) internal override {
+        // minting or burning are pushed in other functions
+        if (from == address(0x0) || to == address(0x0)) {
+            return;
+        }
+
+        bytes memory body = abi.encodePacked("0+3+Token Transfered+");
+        body = abi.encodePacked(
+            body,
+            '{"operator":"',
+            operator.toHexString(),
+            '","from":"',
+            from.toHexString(),
+            '","to":"',
+            to.toHexString(),
+            '","ids":'
+        );
+
+        bytes memory idStr = abi.encodePacked("[");
+        bytes memory amountStr = abi.encodePacked("[");
+        for (uint256 i = 0; i < ids.length; i++) {
+            if (i == 0) {
+                idStr = abi.encodePacked(idStr, '"', ids[i].toHexString(), '"');
+                amountStr = abi.encodePacked(
+                    amountStr,
+                    '"',
+                    amounts[i].toHexString(),
+                    '"'
+                );
+            } else {
+                idStr = abi.encodePacked(
+                    idStr,
+                    ',"',
+                    ids[i].toHexString(),
+                    '"'
+                );
+                amountStr = abi.encodePacked(
+                    amountStr,
+                    ',"',
+                    amounts[i].toHexString(),
+                    '"'
+                );
+            }
+        }
+
+        _push.sendNotification(
+            _channelAddress,
+            from,
+            bytes(
+                string(
+                    abi.encodePacked(
+                        body,
+                        idStr,
+                        '],"amounts":',
+                        amountStr,
+                        '],"data":"',
+                        string(data),
+                        '"}'
+                    )
+                )
+            )
+        );
+    }
+
     function _notifyERC20Lock(
         address tokenAddress,
         uint256 token1155ID,
