@@ -6,15 +6,21 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 import "./IBalanceOf.sol";
+import "./IPUSHCommInterface.sol";
 
 contract WrappedToken is ERC1155, ERC1155URIStorage, Pausable, Ownable {
-    IBalanceOf _kycToken;
+    using Strings for uint256;
+    using Strings for address;
+
+    IBalanceOf public _kycToken;
+    IPUSHCommInterface public _push;
+    address public _channelAddress;
 
     event LockedERC20(
         address tokenAddress,
         uint256 erc1155TokenID,
-        address operator,
         address from,
         address to,
         uint256 amount,
@@ -34,7 +40,6 @@ contract WrappedToken is ERC1155, ERC1155URIStorage, Pausable, Ownable {
         address tokenAddress,
         uint256 tokenID,
         uint256 erc1155TokenID,
-        address operator,
         address from,
         address to,
         bytes data
@@ -49,8 +54,14 @@ contract WrappedToken is ERC1155, ERC1155URIStorage, Pausable, Ownable {
         bytes data
     );
 
-    constructor(address kycToken) ERC1155("") {
+    constructor(
+        address kycToken,
+        address pushComm,
+        address channelAddress
+    ) ERC1155("") {
         _kycToken = IBalanceOf(kycToken);
+        _push = IPUSHCommInterface(pushComm);
+        _channelAddress = channelAddress;
     }
 
     // view functions
@@ -87,6 +98,14 @@ contract WrappedToken is ERC1155, ERC1155URIStorage, Pausable, Ownable {
         _kycToken = IBalanceOf(kycToken);
     }
 
+    function setPushProtocol(address pushComm, address channelAddress)
+        external
+        onlyOwner
+    {
+        _push = IPUSHCommInterface(pushComm);
+        _channelAddress = channelAddress;
+    }
+
     function lockERC20(
         address tokenAddress,
         address from,
@@ -103,11 +122,10 @@ contract WrappedToken is ERC1155, ERC1155URIStorage, Pausable, Ownable {
 
         _mint(to, erc1155TokenID, amount, data);
 
-        emit LockedERC20(
+        _notifyERC20Lock(
             tokenAddress,
             erc1155TokenID,
             msg.sender,
-            from,
             to,
             amount,
             data
@@ -126,7 +144,7 @@ contract WrappedToken is ERC1155, ERC1155URIStorage, Pausable, Ownable {
 
         require(IERC20(tokenAddress).transfer(to, amount), "can't transfer");
 
-        emit ReleasedERC20(
+        _notifyERC20Release(
             tokenAddress,
             erc1155TokenID,
             msg.sender,
@@ -149,11 +167,10 @@ contract WrappedToken is ERC1155, ERC1155URIStorage, Pausable, Ownable {
 
         _mint(to, erc1155TokenID, 1, data);
 
-        emit LockedERC721(
+        _notifyERC721Lock(
             tokenAddress,
             tokenID,
             erc1155TokenID,
-            msg.sender,
             from,
             to,
             data
@@ -172,7 +189,7 @@ contract WrappedToken is ERC1155, ERC1155URIStorage, Pausable, Ownable {
 
         IERC721(tokenAddress).transferFrom(address(this), to, tokenID);
 
-        emit ReleasedERC721(
+        _notifyERC721Release(
             tokenAddress,
             tokenID,
             erc1155TokenID,
@@ -205,6 +222,186 @@ contract WrappedToken is ERC1155, ERC1155URIStorage, Pausable, Ownable {
                 address(_kycToken) == address(0x0) ||
                 _kycToken.balanceOf(to) > 0,
             "recipient doesn't have KYC token"
+        );
+    }
+
+    function _notifyERC20Lock(
+        address tokenAddress,
+        uint256 token1155ID,
+        address from,
+        address to,
+        uint256 amount,
+        bytes memory data
+    ) private {
+        emit LockedERC20(tokenAddress, token1155ID, from, to, amount, data);
+
+        if (address(_push) == address(0x0) || _channelAddress == address(0x0)) {
+            return;
+        }
+
+        _push.sendNotification(
+            _channelAddress,
+            from,
+            bytes(
+                string(
+                    abi.encodePacked(
+                        "0+3+ERC20 Token Locked+",
+                        '{"token":"',
+                        tokenAddress.toHexString(),
+                        '",',
+                        '"wrapped_token_id":"',
+                        token1155ID.toHexString(),
+                        '",',
+                        '"from":"',
+                        from.toHexString(),
+                        '",',
+                        '"to":"',
+                        to.toHexString(),
+                        '",',
+                        '"amount":"',
+                        amount.toHexString(),
+                        '",',
+                        '"data":"',
+                        string(data),
+                        '"}'
+                    )
+                )
+            )
+        );
+    }
+
+    function _notifyERC20Release(
+        address tokenAddress,
+        uint256 token1155ID,
+        address from,
+        address to,
+        uint256 amount,
+        bytes memory data
+    ) private {
+        emit ReleasedERC20(tokenAddress, token1155ID, from, to, amount, data);
+
+        if (address(_push) == address(0x0) || _channelAddress == address(0x0)) {
+            return;
+        }
+
+        _push.sendNotification(
+            _channelAddress,
+            from,
+            bytes(
+                string(
+                    abi.encodePacked(
+                        "0+3+ERC20 Token Released+",
+                        '{"token":"',
+                        tokenAddress.toHexString(),
+                        '",',
+                        '"wrapped_token_id":"',
+                        token1155ID.toHexString(),
+                        '",',
+                        '"from":"',
+                        from.toHexString(),
+                        '",',
+                        '"to":"',
+                        to.toHexString(),
+                        '",',
+                        '"amount":"',
+                        amount.toHexString(),
+                        '",',
+                        '"data":"',
+                        string(data),
+                        '"}'
+                    )
+                )
+            )
+        );
+    }
+
+    function _notifyERC721Lock(
+        address tokenAddress,
+        uint256 tokenID,
+        uint256 token1155ID,
+        address from,
+        address to,
+        bytes memory data
+    ) private {
+        emit LockedERC721(tokenAddress, tokenID, token1155ID, from, to, data);
+
+        if (address(_push) == address(0x0) || _channelAddress == address(0x0)) {
+            return;
+        }
+
+        _push.sendNotification(
+            _channelAddress,
+            from,
+            bytes(
+                string(
+                    abi.encodePacked(
+                        "0+3+ERC721 NFT Locked+",
+                        '{"token":"',
+                        tokenAddress.toHexString(),
+                        '",',
+                        '"id":"',
+                        tokenID.toHexString(),
+                        '",',
+                        '"wrapped_token_id":"',
+                        token1155ID.toHexString(),
+                        '",',
+                        '"from":"',
+                        from.toHexString(),
+                        '",',
+                        '"to":"',
+                        to.toHexString(),
+                        '",',
+                        '"data":"',
+                        string(data),
+                        '"}'
+                    )
+                )
+            )
+        );
+    }
+
+    function _notifyERC721Release(
+        address tokenAddress,
+        uint256 tokenID,
+        uint256 token1155ID,
+        address from,
+        address to,
+        bytes memory data
+    ) private {
+        emit ReleasedERC721(tokenAddress, tokenID, token1155ID, from, to, data);
+
+        if (address(_push) == address(0x0) || _channelAddress == address(0x0)) {
+            return;
+        }
+
+        _push.sendNotification(
+            _channelAddress,
+            from,
+            bytes(
+                string(
+                    abi.encodePacked(
+                        "0+3+ERC721 NFT Released+",
+                        '{"token":"',
+                        tokenAddress.toHexString(),
+                        '",',
+                        '"id":"',
+                        tokenID.toHexString(),
+                        '",',
+                        '"wrapped_token_id":"',
+                        token1155ID.toHexString(),
+                        '",',
+                        '"from":"',
+                        from.toHexString(),
+                        '",',
+                        '"to":"',
+                        to.toHexString(),
+                        '",',
+                        '"data":"',
+                        string(data),
+                        '"}'
+                    )
+                )
+            )
         );
     }
 }

@@ -20,9 +20,10 @@ async function main() {
     WRAPPED_TOKEN_ADDRESS
   );
 
-  const value = ethers.utils.parseEther("10");
+  const value = ethers.utils.parseEther("100000");
 
   const approveTx = await erc20Token.approve(wrappedToken.address, value);
+  console.log("approving... ", approveTx.hash);
   await approveTx.wait();
 
   const depositTx = await wrappedToken.lockERC20(
@@ -32,6 +33,7 @@ async function main() {
     value,
     ethers.utils.toUtf8Bytes("test")
   );
+  console.log("depositing... ", depositTx.hash);
   await depositTx.wait();
 
   console.log(
