@@ -177,7 +177,6 @@ const SubmitForm = ({props}:any): any => {
         <div className='w-full p-4 flex items-center justify-center'> 
           <button className='p-2 px-4 bg-blue-500 rounded-md' onClick={submitTransaction}>SEND</button>
         </div>
-       
       </div>
   </>
 }
