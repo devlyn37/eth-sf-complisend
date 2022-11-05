@@ -138,13 +138,7 @@ const SetTokenForm = ({
 interface NotesState {
   notes: string
 }
-const SetNotesForm = ({
-  state,
-  onSet,
-}: {
-  state: NotesState
-  onSet: (state: NotesState) => void
-}): any => {
+const SetNotesForm = ({ state, onSet }: any): any => {
   const [notes, setNotes] = useState('')
   const [open_form, setFormOpen] = useState(false)
 
@@ -207,13 +201,7 @@ const AuthForm = ({ props }: any): any => {
 interface AddressState {
   address: string
 }
-const SetRecieverForm = ({
-  state,
-  onSet,
-}: {
-  state: AddressState
-  onSet: (state: AddressState) => void
-}): any => {
+const SetRecieverForm = ({ state, onSet }: any): any => {
   const [address, setAddress] = useState('')
   const [open_form, setFormOpen] = useState(false)
 
@@ -281,17 +269,16 @@ export function LoaderBar({ loading }: any) {
 }
 
 const SubmitForm = ({ props }: any): any => {
-  const [token_state, setTokenState] = useState({ amount: '' })
+  const [token_state, setTokenState] = useState({ amount: 0 })
   const [reciever_state, setRecieverState] = useState({ address: '' })
   const [notes_state, setNotesState] = useState({ notes: '' })
 
-  let [is_sending, setIsSending] = useState(false)
-
+  const recipient = reciever_state.address
+  const amount = token_state.amount
+  const note = notes_state.notes
   // merging
 
   const { address } = useAccount()
-  const [amount, setAmount] = useState(0)
-  const [recipient, setRecipient] = useState('')
   const { initClient, client } = useContext(XmtpContext)
   const toast = useToast()
 
@@ -351,23 +338,26 @@ const SubmitForm = ({ props }: any): any => {
 
   const { isLoading } = useWaitForTransaction({
     hash: data?.hash,
+    onError(err) {
+      toast({
+        title: 'Transaction Failed',
+        description: (
+          <>
+            <Text>{`Something went wrong ${err}`}</Text>
+          </>
+        ),
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
+    },
     async onSuccess(data) {
       console.log('success data', data)
-
-      if (!client) {
-        throw new Error('Did not sign xmtp messages')
-      }
-
-      const conversation = await client?.conversations.newConversation(
-        getAddress(recipient)
-      )
-      const result = await conversation.send(`hash: ${data.transactionHash}`)
-      console.log(result)
       toast({
         title: 'Transaction Successful',
         description: (
           <>
-            <Text>Transfered the WETH</Text>
+            <Text>Transfer Successful</Text>
             <Text>
               <Link
                 href={`https://goerli.etherscan.io/tx/${data?.blockHash}`}
@@ -383,22 +373,28 @@ const SubmitForm = ({ props }: any): any => {
         isClosable: true,
       })
 
-      setRecipient('')
-      setAmount(0)
+      if (!client) {
+        throw new Error('Did not sign xmtp messages')
+      }
+
+      const conversation = await client?.conversations.newConversation(
+        getAddress(recipient)
+      )
+      const result = await conversation.send(
+        `hash: ${data.transactionHash}, note: ${note}`
+      )
+
+      setRecieverState({ address: '' })
+      setTokenState({ amount: 0 })
+      setNotesState({ notes: '' })
     },
   })
 
-  const onClick = useCallback(async () => {
+  const submit = useCallback(async () => {
     // TODO queue these all at once somehow
     await initClient()
     await write?.()
   }, [write, initClient])
-
-  // end merging
-
-  let submitTransaction = function () {
-    // combine token_state & notes_state and submit
-  }
 
   return (
     <>
@@ -424,14 +420,15 @@ const SubmitForm = ({ props }: any): any => {
 
         <div className="w-full p-4 flex items-center justify-center">
           <button
+            disabled={!write || isLoading}
             className="p-3 px-8 bg-blue-600 rounded-xl font-black"
-            onClick={submitTransaction}
+            onClick={submit}
           >
             SEND
           </button>
         </div>
       </div>
-      <OverlayDialog show={false}>
+      <OverlayDialog show={isLoading}>
         <LoaderBar> </LoaderBar>
         <div className="p-2">sending....</div>
       </OverlayDialog>

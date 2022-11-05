@@ -1,4 +1,5 @@
 // import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider } from '@chakra-ui/react'
 import {
   connectorsForWallets,
   darkTheme,
@@ -62,9 +63,9 @@ export default function App({
         })}
       >
         <XmtpProvider>
-          {/* <ChakraProvider> */}
-          <Component {...pageProps} />
-          {/* </ChakraProvider> */}
+          <ChakraProvider>
+            <Component {...pageProps} />
+          </ChakraProvider>
         </XmtpProvider>
       </RainbowKitProvider>
     </WagmiConfig>
