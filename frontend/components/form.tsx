@@ -117,6 +117,9 @@ export const SetRecieverForm = ({ state, onSet }: any): any => {
   const onSetAddressChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setAddress(event.target.value)
+      onSet({
+        address: event.target.value
+      })
     },
     []
   )
@@ -140,6 +143,8 @@ export const SetRecieverForm = ({ state, onSet }: any): any => {
       <input
         className="bg-transparent p-4 text-xl font-bold text-cyan-500 w-full rounded-lg outline-none"
         onChange={onSetAddressChange}
+        autoComplete="on"
+        name='wallet_address'
         onFocus={setFocus.bind(null,true)}
         onBlur={setFocus.bind(null,false)}
         placeholder="wallet address"
