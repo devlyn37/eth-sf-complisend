@@ -96,12 +96,12 @@ contract WrappedToken is ERC1155, ERC1155URIStorage, Pausable, Ownable {
     ) external whenNotPaused {
         uint256 erc1155TokenID = erc20TokenID(tokenAddress);
 
-        _mint(to, erc1155TokenID, amount, data);
-
         require(
             IERC20(tokenAddress).transferFrom(from, address(this), amount),
             "can't transfer"
         );
+
+        _mint(to, erc1155TokenID, amount, data);
 
         emit LockedERC20(
             tokenAddress,
@@ -145,9 +145,9 @@ contract WrappedToken is ERC1155, ERC1155URIStorage, Pausable, Ownable {
     ) external whenNotPaused {
         uint256 erc1155TokenID = erc721TokenID(tokenAddress, tokenID);
 
-        _mint(to, erc1155TokenID, 1, data);
-
         IERC721(tokenAddress).transferFrom(from, address(this), tokenID);
+
+        _mint(to, erc1155TokenID, 1, data);
 
         emit LockedERC721(
             tokenAddress,
