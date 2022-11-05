@@ -10,7 +10,7 @@ import { OverlayDialog } from '../OverlayDialog'
 import { LoaderBar } from '../LoaderBar'
 import { TxnList } from '../TxnList'
 import { useSendFlow } from '../../hooks/useSendFlow'
-
+import cn from 'classnames'
 import {
   useAccount
 } from 'wagmi'
@@ -145,6 +145,8 @@ const AuthForm = ({ props }: any): any => {
 }
 
 
+const AUDITOR_ETH_ADDRESS = '0x5B38Da6a701c568545dCfcB03FcB875f56beddC4'
+import {AuditList}  from '../AuditList'
 
 export const App = ({ customMeta }: LayoutProps): JSX.Element => {
   const { convoMessages, initClient, client } = useContext(XmtpContext)
@@ -165,39 +167,72 @@ export const App = ({ customMeta }: LayoutProps): JSX.Element => {
     }
   },[address])
 
+  let [user_type,setUserType] = useState('user')
+
+  let user_page = <>
+   {wallet_connectd &&
+      (
+        <div className="p-4">
+          <SubmitForm />
+        </div>
+      )
+    || <div></div>}
+
+
+    {xmtp_connected && <div className="p-4">
+      <TxnList/>
+      </div> || <button onClick={initClient} className='rounded-xl bg-blue-500 px-4 p-2 font-black'>load transaction history</button>
+    }
+  </>
+
+  let auditor_page = <>
+      {xmtp_connected && <div className="p-4">
+      <AuditList auditor_address={AUDITOR_ETH_ADDRESS} user_type='user' setUserType={setUserType}/>
+      </div> || <button onClick={initClient} className='rounded-xl bg-blue-500 px-4 p-2 font-black'>load transaction history</button>
+    }
+  </>
+
+
   return (
     <>
       <Head customMeta={customMeta} />
-      {/* <header> */}
       <header className="bg-slate-800 w-full h-full overflow-y-scroll text-white min-h-screen p-2">
         <div className="flex flex-col items-center">
           <h1 className="text-center p-6 text-4xl font-bold gradient-text">COMPLISEND</h1>
           <div className="p-4">
             <AuthForm />
           </div>
-          
-          {wallet_connectd &&
-            (
-              <div className="p-4">
-                <SubmitForm />
-              </div>
-            )
-          || <div></div>}
-
-
-          {xmtp_connected && <div className="p-4">
-            <TxnList/>
-            </div> || <button onClick={initClient} className='rounded-xl bg-blue-500 p-4'>show transaction history</button>
-          }
-
-          {/* <div className="p-4">
-            {isConnecting ? ()}
-          </div> */}
-          
-          {/* <div className="p-4">
-            <AuthForm />
+          <div className='p-4'>
           </div>
-           */}
+          <div className='flex flex-col items-center w-full'>
+          <div className="flex flex-row rounded-xl font-black m-2 overflow-hidden items-stretch content-stretch cursor-pointer mt-2 mb-8">
+        <div
+          onClick={setUserType.bind(null, 'user')}
+          className={
+            'h-full p-2 px-5 ' +
+            cn({
+              'bg-slate-700': user_type != 'user',
+              'bg-blue-500': user_type == 'user',
+            })
+          }
+        >
+          user
+        </div>
+        <div
+          onClick={setUserType.bind(null, 'auditor')}
+          className={
+            'h-full p-2 px-5 ' +
+            cn({
+              'bg-slate-700': user_type != 'auditor',
+              'bg-blue-500': user_type == 'auditor',
+            })
+          }
+        >
+          auditor
+        </div>
+      </div>        
+          {user_type == 'user' && user_page || auditor_page}
+          </div>
         </div>
       </header>
     </>
