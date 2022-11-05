@@ -24,30 +24,22 @@ export const XmtpProvider: React.FC<any> = ({ children }) => {
     new Map()
   )
 
-  const initClient = useCallback(
-    async (wallet: Signer) => {
-      if (wallet && !client) {
-        try {
-          setClient(await Client.create(wallet))
-        } catch (e) {
-          console.error(e)
-          setClient(null)
-        }
+  const initClient = useCallback(async () => {
+    if (signer && !client) {
+      try {
+        setClient(await Client.create(signer))
+      } catch (e) {
+        console.error(e)
+        setClient(null)
       }
-    },
-    [client]
-  )
+    }
+  }, [signer, client])
 
   const disconnect = () => {
     setClient(undefined)
     setConversations(new Map())
     setConvoMessages(new Map())
   }
-
-  useEffect(() => {
-    signer ? initClient(signer) : disconnect()
-  }, [signer])
-
   useEffect(() => {
     if (!client) return
 

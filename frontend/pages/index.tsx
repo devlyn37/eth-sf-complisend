@@ -1,27 +1,22 @@
 import { Button, Input, Link, Spinner, Text, useToast } from '@chakra-ui/react'
 import { BigNumber } from 'ethers'
 import type { NextPage } from 'next'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import {
   useContractWrite,
   usePrepareContractWrite,
   useWaitForTransaction,
   erc20ABI,
-  useSigner,
 } from 'wagmi'
-import { Client } from '@xmtp/xmtp-js'
 
 import { Layout } from '../components/layout/Layout'
+import XmtpContext from '../context/xmtp'
 
 const GOERLI_CONTRACT_ADDRESS = '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6'
 
 const Home: NextPage = () => {
   const [amount, setAmount] = useState(0)
-  const {
-    data: signer,
-    isError: isErrorSigner,
-    isLoading: isLoadingSigner,
-  } = useSigner()
+  const { initClient, client } = useContext(XmtpContext)
   const toast = useToast()
 
   let bigNumberAmount: BigNumber | undefined = undefined
@@ -91,6 +86,14 @@ const Home: NextPage = () => {
         }}
       >
         {isLoading ? <Spinner /> : 'Transfer'}
+      </Button>
+      <Button
+        disabled={!write}
+        onClick={() => {
+          initClient()
+        }}
+      >
+        {isLoading ? <Spinner /> : 'Testing'}
       </Button>
     </Layout>
   )
