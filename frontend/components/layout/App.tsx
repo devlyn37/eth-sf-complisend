@@ -25,7 +25,7 @@ const LoadingOverlay = ({props}:any): any => {
 
 
 
-export function OverlayDialog({children,show,onClose,onSubmit}:any){
+export function OverlayDialog({children,show,onClose=()=>{},onSubmit=()=>{}}:any){
     // console.log(error)
     return (
         <Dialog open={show} onClose={onClose}>
@@ -160,11 +160,37 @@ const SetRecieverForm = ({state={},onSet}:any): any => {
   </>
 }
 
+
+export function LoaderBar({loading}:any){
+   
+  let loader_bar_cn = cn({
+      'rounded-md h-3 bg-black/20 search-loader-bar overflow-hidden':true,
+      'w-6': !loading,
+      'w-12':loading,
+  })
+
+  let loader_dot_cn = cn({
+      'rounded-md h-3 transition-transform':true,
+      'w-3 bg-black/0':!loading,
+      'w-4 bg-white search-loader-dot-active':loading,
+  })
+
+  
+  return <div className="flex items-center justify-center">
+      <div className={loader_bar_cn}>
+          <div className={loader_dot_cn}></div>
+      </div>
+  </div>
+}
+
+
 const SubmitForm = ({props}:any): any => {
 
   let [token_state,setTokenState] = useState({})
   let [reciever_state,setRecieverState] = useState({})
   let [notes_state,setNotesState] = useState({})
+
+  let [is_sending,setIsSending] = useState(false)
 
   let submitTransaction = function(){
     // combine token_state & notes_state and submit
@@ -188,6 +214,11 @@ const SubmitForm = ({props}:any): any => {
           <button className='p-3 px-8 bg-blue-600 rounded-xl font-black' onClick={submitTransaction}>SEND</button>
         </div>
       </div>
+      <OverlayDialog show={false}>
+        <LoaderBar> </LoaderBar>
+        <div className='p-2'>sending....</div>
+        
+      </OverlayDialog>
   </>
 }
 
