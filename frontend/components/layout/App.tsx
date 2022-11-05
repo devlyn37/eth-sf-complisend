@@ -161,8 +161,9 @@ const SetRecieverForm = ({state,onSet}:any): any => {
 
 const SubmitForm = ({props}:any): any => {
 
-  let [token_state,setTokenState] = useState(undefined)
-  let [notes_state,setNotesState] = useState(undefined)
+  let [token_state,setTokenState] = useState({})
+  let [reciever_state,setRecieverState] = useState({})
+  let [notes_state,setNotesState] = useState({})
 
   let submitTransaction = function(){
     // combine token_state & notes_state and submit
@@ -170,9 +171,8 @@ const SubmitForm = ({props}:any): any => {
 
   return <>
       <div className='flex bg-slate-800 flex-col max-w-2xl w-screen p-4 rounded-md'>
-
         <SetTokenForm state={token_state} onSet={setTokenState}></SetTokenForm>
-        <SetRecieverForm value={token_state} onSet={setTokenState}></SetRecieverForm>
+        <SetRecieverForm value={reciever_state} onSet={setRecieverState}></SetRecieverForm>
         <SetNotesForm value={notes_state} onSet={setNotesState}></SetNotesForm>
         <div className='w-full p-4 flex items-center justify-center'> 
           <button className='p-2 px-4 bg-blue-500 rounded-md' onClick={submitTransaction}>SEND</button>
