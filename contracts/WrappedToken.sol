@@ -8,13 +8,19 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./IBalanceOf.sol";
+import "./KYCVerifier.sol";
 import "./IPUSHCommInterface.sol";
 
-contract WrappedToken is ERC1155, ERC1155URIStorage, Pausable, Ownable {
+contract WrappedToken is
+    ERC1155,
+    ERC1155URIStorage,
+    Pausable,
+    Ownable,
+    KYCVerifier
+{
     using Strings for uint256;
     using Strings for address;
 
-    IBalanceOf public _kycToken;
     IPUSHCommInterface public _push;
     address public _channelAddress;
 
@@ -55,10 +61,10 @@ contract WrappedToken is ERC1155, ERC1155URIStorage, Pausable, Ownable {
     );
 
     constructor(
-        address kycToken,
+        IBalanceOf kycToken,
         address pushComm,
         address channelAddress
-    ) ERC1155("") {
+    ) ERC1155("") KYCVerifier(kycToken) {
         _kycToken = IBalanceOf(kycToken);
         _push = IPUSHCommInterface(pushComm);
         _channelAddress = channelAddress;
@@ -95,7 +101,7 @@ contract WrappedToken is ERC1155, ERC1155URIStorage, Pausable, Ownable {
     }
 
     function setKYCToken(address kycToken) external onlyOwner {
-        _kycToken = IBalanceOf(kycToken);
+        _setKYCToken(IBalanceOf(kycToken));
     }
 
     function setPushProtocol(address pushComm, address channelAddress)
@@ -207,22 +213,7 @@ contract WrappedToken is ERC1155, ERC1155URIStorage, Pausable, Ownable {
         uint256[] memory _amounts,
         bytes memory _data
     ) internal override {
-        // Verification
-        require(
-            // ignore in case of minting or KYCToken is not set
-            from == address(0x0) ||
-                address(_kycToken) == address(0x0) ||
-                _kycToken.balanceOf(from) > 0,
-            "sender doesn't have KYC token"
-        );
-
-        require(
-            // ignire in case of burning or KYCToken is not set
-            to == address(0x0) ||
-                address(_kycToken) == address(0x0) ||
-                _kycToken.balanceOf(to) > 0,
-            "recipient doesn't have KYC token"
-        );
+        super.kycVerify(from, to);
     }
 
     function _afterTokenTransfer(
