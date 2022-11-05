@@ -1,7 +1,7 @@
 import { Button, Input, Link, Spinner, Text, useToast } from '@chakra-ui/react'
 import { BigNumber, ethers } from 'ethers'
 import type { NextPage } from 'next'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState, useContext } from 'react'
 import {
   useAccount,
   useContractRead,
@@ -9,7 +9,9 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi'
+
 import { Layout } from '../components/layout/Layout'
+import XmtpContext from '../context/xmtp'
 
 const WRAPPED_TOKEN_ABI = require('../artifacts/contracts/WrappedToken.sol/WrappedToken.json')
 
@@ -23,6 +25,7 @@ const Home: NextPage = () => {
   const { address } = useAccount()
   const [amount, setAmount] = useState(0)
   const [recipient, setRecipient] = useState('')
+  const { initClient, client } = useContext(XmtpContext)
   const toast = useToast()
 
   const bigNumberAmount = useMemo(() => {
@@ -150,6 +153,14 @@ const Home: NextPage = () => {
       />{' '}
       <Button disabled={!write || isLoading} onClick={onClick}>
         {isLoading ? <Spinner /> : 'Transfer'}
+      </Button>
+      <Button
+        disabled={!write}
+        onClick={() => {
+          initClient()
+        }}
+      >
+        {isLoading ? <Spinner /> : 'Testing'}
       </Button>
     </Layout>
   )
