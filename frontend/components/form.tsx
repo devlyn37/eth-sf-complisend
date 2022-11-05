@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { OverlayDialog } from './OverlayDialog'
 
 interface TokenState {
@@ -19,9 +19,11 @@ export const SetTokenForm = ({
       const x = Number.parseFloat(event.target.value)
 
       setAmount(Number.isNaN(x) ? 0 : x)
+      
     },
     []
   )
+  
 
   const onSubmit = (e: any) => {
     e.preventDefault()
