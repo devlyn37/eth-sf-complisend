@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from 'ethers'
-import { formatEther, formatUnits, parseEther } from 'ethers/lib/utils'
+import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useMemo } from 'react'
 import {
   erc20ABI,
@@ -27,7 +27,6 @@ const WRAPPED_TOKEN_ADDRESS = '0x02052ABEC1ccc18093022b6b648b9754201C7D5f'
 
 function useApprove(
   amount: number,
-  address: string,
   enabled: boolean,
   onSuccess: (data: ethers.providers.TransactionReceipt) => void,
   onError: (err: any) => void
@@ -73,7 +72,7 @@ function useLock(
       // data
       ethers.utils.toUtf8Bytes('transfer'),
     ],
-    enabled: true,
+    enabled: enabled,
   })
   const { data, write, error } = useContractWrite(config as any)
   const { isLoading } = useWaitForTransaction({
@@ -144,13 +143,7 @@ export function useSendFlow(
     data: dataAllow,
     write: writeAllow,
     error: errorAllow,
-  } = useApprove(
-    amount,
-    address as any,
-    validInput && !canLock,
-    onSuccess,
-    onError
-  )
+  } = useApprove(amount, validInput && !canLock, onSuccess, onError)
 
   const {
     isLoading: isLoadingLock,
@@ -196,13 +189,7 @@ export function useSendFlow(
       write = undefined
     } else {
       state = SendFlowState.allowanceGood
-      write = async () => {
-        console.log('Sanity check')
-        if (!writeLock) {
-          throw new Error('wtf why is this undefined')
-        }
-        await writeLock()
-      }
+      write = writeLock
     }
   } else {
     state = SendFlowState.LockComplete

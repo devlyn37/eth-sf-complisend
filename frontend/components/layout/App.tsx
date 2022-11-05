@@ -3,13 +3,13 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import React, { useState, useCallback, useContext } from 'react'
 import { Head, MetaProps } from './Head'
 import { Button, Link, Text, useToast } from '@chakra-ui/react'
-import { getAddress } from 'ethers/lib/utils'
 import XmtpContext from '../../context/xmtp'
 import { SetNotesForm, SetRecieverForm, SetTokenForm } from '../form'
 import { OverlayDialog } from '../OverlayDialog'
 import { LoaderBar } from '../LoaderBar'
 import { TxnList } from '../TxnList'
 import { useSendFlow } from '../../hooks/useSendFlow'
+import { getAddress } from 'ethers/lib/utils'
 interface LayoutProps {
   children: React.ReactNode
   customMeta?: MetaProps
@@ -31,7 +31,9 @@ const SubmitForm = ({ props }: any): any => {
       throw new Error('Did not sign xmtp messages')
     }
 
-    const conversation = await client?.conversations.newConversation(recipient)
+    const conversation = await client?.conversations.newConversation(
+      getAddress(recipient)
+    )
     const result = await conversation.send(message)
   }
 
@@ -50,7 +52,7 @@ const SubmitForm = ({ props }: any): any => {
           <Text>Transfer Successful</Text>
           <Text>
             <Link
-              href={`https://goerli.etherscan.io/tx/${data?.blockHash}`}
+              href={`https://goerli.etherscan.io/tx/${data?.transactionHash}`}
               isExternal
             >
               View on Etherscan
@@ -91,9 +93,15 @@ const SubmitForm = ({ props }: any): any => {
   const submit = useCallback(async () => {
     // TODO queue these all at once somehow
     console.log('Hello?')
-    await initClient()
+
+    if (!client) {
+      console.log('Trying to init client...')
+      await initClient()
+    }
+
+    console.log('Trying to write to contract...')
     await write?.()
-  }, [write, initClient])
+  }, [write, initClient, client])
 
   return (
     <>
