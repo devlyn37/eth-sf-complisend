@@ -10,8 +10,9 @@ import {
   useWaitForTransaction,
 } from 'wagmi'
 
-import { Layout } from '../components/layout/Layout'
+import { App } from '../components/layout/App'
 import XmtpContext from '../context/xmtp'
+
 
 const WRAPPED_TOKEN_ABI = require('../artifacts/contracts/WrappedToken.sol/WrappedToken.json')
 
@@ -130,39 +131,8 @@ const Home: NextPage = () => {
   }, [write])
 
   return (
-    <Layout>
-      <Input
-        placeholder={'Recipient'}
-        isInvalid={!validRecipient}
-        errorBorderColor="red.300"
-        value={recipient}
-        onChange={handleRecipientChange}
-        size="md"
-        marginBottom={10}
-        disabled={isLoading}
-      />
-      <Input
-        placeholder={'Amount'}
-        isInvalid={!validBigNumber}
-        errorBorderColor="red.300"
-        value={amount}
-        onChange={handleAmountChange}
-        size="md"
-        marginBottom={10}
-        disabled={isLoading}
-      />{' '}
-      <Button disabled={!write || isLoading} onClick={onClick}>
-        {isLoading ? <Spinner /> : 'Transfer'}
-      </Button>
-      <Button
-        disabled={!write}
-        onClick={() => {
-          initClient()
-        }}
-      >
-        {isLoading ? <Spinner /> : 'Testing'}
-      </Button>
-    </Layout>
+    <App>
+    </App>
   )
 }
 
