@@ -9,6 +9,7 @@ import '@rainbow-me/rainbowkit/styles.css'
 import type { AppProps } from 'next/app'
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi'
 import { publicProvider } from 'wagmi/providers/public'
+import XmtpProvider from '../providers/XmtpProvider'
 
 const devChains = [
   chain.goerli,
@@ -59,9 +60,11 @@ export default function App({
           borderRadius: 'small',
         })}
       >
-        <ChakraProvider>
-          <Component {...pageProps} />
-        </ChakraProvider>
+        <XmtpProvider>
+          <ChakraProvider>
+            <Component {...pageProps} />
+          </ChakraProvider>
+        </XmtpProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   )
