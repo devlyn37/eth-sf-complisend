@@ -65,7 +65,7 @@ const SetTokenForm = ({state,onSet}:any): any => {
 
   const onSubmit = (e:any) => {
     e.preventDefault()
-    console.log('submit')
+    
     onSet({
       amount:amount,
     })
@@ -95,7 +95,7 @@ const SetNotesForm = ({state,onSet}:any): any => {
 
   const onSubmit = (e:any) => {
     e.preventDefault()
-    console.log('submit')
+    
     onSet({
       notes:notes,
     })
@@ -147,7 +147,7 @@ const SetRecieverForm = ({state={},onSet}:any): any => {
     setFormOpen(false)
   }
 
-  console.log(open_form)
+
   
   return <>
     <OverlayDialog show={open_form} onSubmit={onSubmit} onClose={setFormOpen.bind(null,false)}>
@@ -192,14 +192,32 @@ const SubmitForm = ({props}:any): any => {
 }
 
 
-const Trx = ({props}:any): any => {
-  return <div className='flex p-2 rounded-md'>
 
+
+
+
+const Trx = ({props}:any): any => {
+  return <div className='flex p-2 rounded-md bg-slate-900 m-2'>
+    trx goes here
   </div>
 }
 
-const TrxList = ({props}:any): any => {
 
+
+const TrxList = ({props}:any): any => {
+  const [filter,setFilter] = useState('sent')
+
+  
+  let trx_list:any = [<Trx/>,<Trx/>,<Trx/>]
+
+
+  return <div>
+    <div className='flex flex-row rounded-xl font-black bg-blue-500 m-2 overflow-hidden items-stretch content-stretch cursor-pointer'>
+      <div onClick={setFilter.bind(null,'sent')} className={'h-full p-2 px-5 '+cn({'bg-slate-700':filter!='sent','bg-blue-500':filter=='sent'})}>sent</div>
+      <div onClick={setFilter.bind(null,'received')} className={'h-full p-2 px-5 '+cn({'bg-slate-700':filter!='received','bg-blue-500':filter=='received'})}>recieved</div>
+    </div>
+    {trx_list}
+  </div>
 }
 
 
@@ -225,9 +243,7 @@ export const App = ({customMeta }: LayoutProps): JSX.Element => {
           <div className='p-4'>
             <TrxList />
           </div>
-          
-          
-          
+  
         </div>
       </header>
 
