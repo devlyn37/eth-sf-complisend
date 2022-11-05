@@ -10,6 +10,7 @@ import type { AppProps } from 'next/app'
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi'
 import { publicProvider } from 'wagmi/providers/public'
 import XmtpProvider from '../providers/XmtpProvider'
+import './index.css'
 
 const devChains = [
   chain.goerli,
