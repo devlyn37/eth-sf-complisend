@@ -1,5 +1,6 @@
 import { Button, Input, Link, Spinner, Text, useToast } from '@chakra-ui/react'
 import { BigNumber, ethers } from 'ethers'
+import { getAddress } from 'ethers/lib/utils'
 import type { NextPage } from 'next'
 import React, { useCallback, useMemo, useState, useContext } from 'react'
 import {
@@ -13,13 +14,11 @@ import {
 import { App } from '../components/layout/App'
 import XmtpContext from '../context/xmtp'
 
-
 const WRAPPED_TOKEN_ABI = require('../artifacts/contracts/WrappedToken.sol/WrappedToken.json')
 
 // WETH in Goerli
 // const GOERLI_CONTRACT_ADDRESS = '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6'
-
-const ERC20_TOKEN_MUMBAI = '0xf38d32C01233eDAF3b61DAaD0eb598521688C3C6'
+const MOCK_TOKEN = '0xf38d32C01233eDAF3b61DAaD0eb598521688C3C6'
 const WRAPPED_TOKEN_ADDRESS = '0x02052ABEC1ccc18093022b6b648b9754201C7D5f'
 
 const Home: NextPage = () => {
@@ -38,6 +37,8 @@ const Home: NextPage = () => {
   }, [amount])
 
   const validBigNumber = bigNumberAmount !== undefined
+  console.log(`validBigNumber: ${validBigNumber}`)
+
   const validRecipient = useMemo(() => {
     if (recipient.length === 0) {
       return true
@@ -56,7 +57,7 @@ const Home: NextPage = () => {
     address: WRAPPED_TOKEN_ADDRESS,
     abi: WRAPPED_TOKEN_ABI.abi,
     functionName: 'erc20TokenID',
-    args: [ERC20_TOKEN_MUMBAI],
+    args: [MOCK_TOKEN],
   })
 
   const { config } = usePrepareContractWrite({
@@ -78,13 +79,23 @@ const Home: NextPage = () => {
     enabled: validBigNumber && recipient.length > 0 && validRecipient,
   })
 
-  const { data, write } = useContractWrite(config as any)
+  const { data, write, error } = useContractWrite(config as any)
+  console.log(error)
 
   const { isLoading } = useWaitForTransaction({
     hash: data?.hash,
-    onSuccess(data) {
+    async onSuccess(data) {
       console.log('success data', data)
 
+      if (!client) {
+        throw new Error('Did not sign xmtp messages')
+      }
+
+      const conversation = await client?.conversations.newConversation(
+        getAddress(recipient)
+      )
+      const result = await conversation.send(`hash: ${data.transactionHash}`)
+      console.log(result)
       toast({
         title: 'Transaction Successful',
         description: (
@@ -126,13 +137,41 @@ const Home: NextPage = () => {
     []
   )
 
-  const onClick = useCallback(() => {
-    write?.()
-  }, [write])
+  const onClick = useCallback(async () => {
+    // TODO queue these all at once somehow
+    await initClient()
+    await write?.()
+  }, [write, initClient])
 
   return (
-    <App>
-    </App>
+    <>
+      {/* <Layout>
+        <Input
+          placeholder={'Recipient'}
+          isInvalid={!validRecipient}
+          errorBorderColor="red.300"
+          value={recipient}
+          onChange={handleRecipientChange}
+          size="md"
+          marginBottom={10}
+          disabled={isLoading}
+        />
+        <Input
+          placeholder={'Amount'}
+          isInvalid={!validBigNumber}
+          errorBorderColor="red.300"
+          value={amount}
+          onChange={handleAmountChange}
+          size="md"
+          marginBottom={10}
+          disabled={isLoading}
+        />{' '}
+        <Button disabled={!write || isLoading} onClick={onClick}>
+          {isLoading ? <Spinner /> : 'Transfer'}
+        </Button>
+      </Layout> */}
+      <App>hi</App>
+    </>
   )
 }
 
