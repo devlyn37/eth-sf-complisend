@@ -137,7 +137,7 @@ const SubmitForm = ({ props }: any): any => {
 const AuthForm = ({ props }: any): any => {
   return (
     <>
-      <div className={'bg-slate-800 rounded-md p-5'}>
+      <div className={'bg-slate-900 rounded-md p-5 w-full'}>
         <ConnectButton />
       </div>
     </>
@@ -171,7 +171,7 @@ export const App = ({ customMeta }: LayoutProps): JSX.Element => {
       {/* <header> */}
       <header className="bg-slate-800 w-full h-full overflow-y-scroll text-white min-h-screen p-2">
         <div className="flex flex-col items-center">
-          <h1 className="text-center p-6 text-4xl">COMPLISEND</h1>
+          <h1 className="text-center p-6 text-4xl font-bold gradient-text">COMPLISEND</h1>
           <div className="p-4">
             <AuthForm />
           </div>

@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { OverlayDialog } from './OverlayDialog'
+import {WalletIcon} from '@heroicons/react/24/solid'
+import cn from 'classnames'
 
 interface TokenState {
   amount: number
@@ -128,27 +130,20 @@ export const SetRecieverForm = ({ state, onSet }: any): any => {
     setFormOpen(false)
   }
 
+  let [is_focus,setFocus] = useState(false)
+
   return (
-    <>
-      <OverlayDialog
-        show={open_form}
-        onSubmit={onSubmit}
-        onClose={setFormOpen.bind(null, false)}
-      >
-        <div className="p-2">set reciever</div>
-        <input
-          className="bg-slate-800 p-6 text-lg"
-          onChange={onSetAddressChange}
-          value={address}
-          placeholder="select address"
-        ></input>
-      </OverlayDialog>
-      <div
-        onClick={setFormOpen.bind(null, true)}
-        className="rounded-md p-4 bg-slate-800 cursor-pointer"
-      >
-        {!address ? 'select address' : address}
-      </div>
-    </>
+    <div
+      className={cn({'flex flex-row bg-black p-4 text-lg w-full rounded-lg outline-4 outline-blue-500':true,'outline':is_focus})}
+    >
+      <WalletIcon className={cn({'w-10 text-white':true})}></WalletIcon>
+      <input
+        className="bg-transparent p-4 text-xl font-bold text-cyan-500 w-full rounded-lg outline-none"
+        onChange={onSetAddressChange}
+        onFocus={setFocus.bind(null,true)}
+        onBlur={setFocus.bind(null,false)}
+        placeholder="wallet address"
+        value={address}></input>
+    </div>
   )
 }

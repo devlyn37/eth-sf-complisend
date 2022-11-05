@@ -55,7 +55,7 @@ export const TxnList = ({ props }: any): any => {
 
   return (
     <div className='flex flex-col items-center w-full'>
-      <div className="flex flex-row rounded-xl font-black bg-blue-500 m-2 overflow-hidden items-stretch content-stretch cursor-pointer">
+      <div className="flex flex-row rounded-xl font-black bg-blue-500 m-2 overflow-hidden items-stretch content-stretch cursor-pointer mt-2 mb-8">
         <div
           onClick={setFilter.bind(null, 'sent')}
           className={
@@ -82,6 +82,7 @@ export const TxnList = ({ props }: any): any => {
         </div>
       </div>
       <LoaderBar loading={loadingConversations}></LoaderBar>
+      <div className='py-8'></div>
       {trx_list}
     </div>
   )
