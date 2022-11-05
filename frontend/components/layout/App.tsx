@@ -74,11 +74,11 @@ const SetTokenForm = ({state,onSet}:any): any => {
   
   return <>
     <OverlayDialog show={open_form} onSubmit={onSubmit} onClose={setFormOpen.bind(null,false)}>
-      <div className='p-2'>set token</div>
+      <div className='p-2'>set amount</div>
       <input className='bg-slate-800 p-6 text-lg' onChange={onSetAmountChange} value={amount}></input>
     </OverlayDialog>
     <div className='rounded-md p-4 bg-slate-700 cursor-pointer' onClick={setFormOpen.bind(null,true)}>
-      select token
+      {!amount ? 'set amount' : amount}
     </div>
   </>
 }
