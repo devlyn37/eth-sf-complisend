@@ -72,15 +72,15 @@ const SetTokenForm = ({state,onSet}:any): any => {
     setFormOpen(false)
   }
   
-  return <div className='rounded-md p-4 bg-slate-700 cursor-pointer' onClick={setFormOpen.bind(null,true)}>
+  return <>
     <OverlayDialog show={open_form} onSubmit={onSubmit} onClose={setFormOpen.bind(null,false)}>
       <div className='p-2'>set token</div>
       <input className='bg-slate-800 p-6 text-lg' onChange={onSetAmountChange} value={amount}></input>
     </OverlayDialog>
-    <div >
+    <div className='rounded-md p-4 bg-slate-700 cursor-pointer' onClick={setFormOpen.bind(null,true)}>
       select token
     </div>
-  </div>
+  </>
 }
 
 
@@ -102,15 +102,15 @@ const SetNotesForm = ({state,onSet}:any): any => {
     setFormOpen(false)
   }
   
-  return <div className='rounded-md p-4 bg-slate-700 cursor-pointer' onClick={setFormOpen.bind(null,true)}>
+  return <>
     <OverlayDialog show={open_form} onSubmit={onSubmit} onClose={setFormOpen.bind(null,false)}>
       <div className='p-2'>set notes</div>
       <textarea className='bg-slate-800 p-6 text-lg' onChange={onSetNotesChange} value={notes} placeholder='set notes'></textarea>
     </OverlayDialog>
-    <div >
-      set notes
+    <div onClick={setFormOpen.bind(null,true)} className='rounded-md p-4 bg-slate-800 cursor-pointer' >
+      {!notes ? 'set notes' :  notes}
     </div>
-  </div>
+  </>
 }
 
 
@@ -149,15 +149,15 @@ const SetRecieverForm = ({state={},onSet}:any): any => {
 
   console.log(open_form)
   
-  return <div className='rounded-md p-4 bg-slate-800 cursor-pointer' onClick={setFormOpen.bind(null,true)}>
+  return <>
     <OverlayDialog show={open_form} onSubmit={onSubmit} onClose={setFormOpen.bind(null,false)}>
       <div className='p-2'>set reciever</div>
       <input className='bg-slate-800 p-6 text-lg' onChange={onSetAddressChange} value={address} placeholder='select address'></input>
     </OverlayDialog>
-    <div >
+    <div onClick={setFormOpen.bind(null,true)} className='rounded-md p-4 bg-slate-800 cursor-pointer' >
       {!address ? 'select address' : address}
     </div>
-  </div>
+  </>
 }
 
 const SubmitForm = ({props}:any): any => {
