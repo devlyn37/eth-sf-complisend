@@ -1,16 +1,8 @@
 // import { Container, Flex, Link, SimpleGrid, Text } from '@chakra-ui/react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import React, {
-  useState,
-  Fragment,
-  useCallback,
-  useMemo,
-  useContext,
-} from 'react'
+import React, { useState, useCallback, useMemo, useContext } from 'react'
 import { Head, MetaProps } from './Head'
-import cn from 'classnames'
-import { Dialog, Transition } from '@headlessui/react'
-import { Link, Text, useToast } from '@chakra-ui/react'
+import { Button, Link, Text, useToast } from '@chakra-ui/react'
 import { getAddress } from 'ethers/lib/utils'
 import {
   useAccount,
@@ -24,6 +16,7 @@ import XmtpContext from '../../context/xmtp'
 import { SetNotesForm, SetRecieverForm, SetTokenForm } from '../form'
 import { OverlayDialog } from '../OverlayDialog'
 import { LoaderBar } from '../LoaderBar'
+import { TxnList } from '../TxnList'
 const WRAPPED_TOKEN_ABI = require('../../artifacts/contracts/WrappedToken.sol/WrappedToken.json')
 
 // WETH in Goerli
@@ -110,6 +103,23 @@ const SubmitForm = ({ props }: any): any => {
   const { data, write, error } = useContractWrite(config as any)
   console.log(error)
 
+  const sendXMPTMessage = async (message: string) => {
+    if (!client) {
+      throw new Error('Did not sign xmtp messages')
+    }
+
+    const conversation = await client?.conversations.newConversation(
+      getAddress(recipient)
+    )
+    const result = await conversation.send(message)
+  }
+
+  const resetInputs = () => {
+    setRecieverState({ address: '' })
+    setTokenState({ amount: 0 })
+    setNotesState({ notes: '' })
+  }
+
   const { isLoading } = useWaitForTransaction({
     hash: data?.hash,
     onError(err) {
@@ -147,20 +157,8 @@ const SubmitForm = ({ props }: any): any => {
         isClosable: true,
       })
 
-      if (!client) {
-        throw new Error('Did not sign xmtp messages')
-      }
-
-      const conversation = await client?.conversations.newConversation(
-        getAddress(recipient)
-      )
-      const result = await conversation.send(
-        `hash: ${data.transactionHash}, note: ${note}`
-      )
-
-      setRecieverState({ address: '' })
-      setTokenState({ amount: 0 })
-      setNotesState({ notes: '' })
+      await sendXMPTMessage(`hash: ${data.transactionHash}, note: ${note}`)
+      resetInputs()
     },
   })
 
@@ -193,13 +191,13 @@ const SubmitForm = ({ props }: any): any => {
         </div>
 
         <div className="w-full p-4 flex items-center justify-center">
-          <button
+          <Button
             disabled={!write || isLoading}
             className="p-3 px-8 bg-blue-600 rounded-xl font-black"
             onClick={submit}
           >
             SEND
-          </button>
+          </Button>
         </div>
       </div>
       <OverlayDialog show={isLoading}>
@@ -207,50 +205,6 @@ const SubmitForm = ({ props }: any): any => {
         <div className="p-2">sending....</div>
       </OverlayDialog>
     </>
-  )
-}
-
-const Trx = ({ props }: any): any => {
-  return (
-    <div className="flex p-2 rounded-md bg-slate-900 m-2">trx goes here</div>
-  )
-}
-
-const TrxList = ({ props }: any): any => {
-  const [filter, setFilter] = useState('sent')
-
-  let trx_list: any = []
-
-  return (
-    <div>
-      <div className="flex flex-row rounded-xl font-black bg-blue-500 m-2 overflow-hidden items-stretch content-stretch cursor-pointer">
-        <div
-          onClick={setFilter.bind(null, 'sent')}
-          className={
-            'h-full p-2 px-5 ' +
-            cn({
-              'bg-slate-700': filter != 'sent',
-              'bg-blue-500': filter == 'sent',
-            })
-          }
-        >
-          sent
-        </div>
-        <div
-          onClick={setFilter.bind(null, 'received')}
-          className={
-            'h-full p-2 px-5 ' +
-            cn({
-              'bg-slate-700': filter != 'received',
-              'bg-blue-500': filter == 'received',
-            })
-          }
-        >
-          recieved
-        </div>
-      </div>
-      {trx_list}
-    </div>
   )
 }
 
@@ -279,7 +233,7 @@ export const App = ({ customMeta }: LayoutProps): JSX.Element => {
             <SubmitForm />
           </div>
           <div className="p-4">
-            <TrxList />
+            <TxnList />
           </div>
         </div>
       </header>
