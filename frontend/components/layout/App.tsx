@@ -239,7 +239,7 @@ const TrxList = ({props}:any): any => {
   const [filter,setFilter] = useState('sent')
 
   
-  let trx_list:any = [<Trx/>,<Trx/>,<Trx/>]
+  let trx_list:any = []
 
 
   return <div>
