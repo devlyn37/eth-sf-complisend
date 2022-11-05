@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "compile": "npx hardhat compile",
-    "test": "hardhat test"
+    "test": "npx hardhat test"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.7.0",

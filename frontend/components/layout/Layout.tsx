@@ -24,17 +24,7 @@ export const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
             <Flex py={[4, null, null, 0]}>
               <NextLink href="/" passHref>
                 <Link px="4" py="1">
-                  Home
-                </Link>
-              </NextLink>
-              <NextLink href="/erc20" passHref>
-                <Link px="4" py="1">
-                  ERC20-Transfer
-                </Link>
-              </NextLink>
-              <NextLink href="/token-gated" passHref>
-                <Link px="4" py="1">
-                  Token Gated
+                  Send
                 </Link>
               </NextLink>
             </Flex>
