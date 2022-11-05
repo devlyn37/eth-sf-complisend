@@ -1,38 +1,18 @@
 // import { Container, Flex, Link, SimpleGrid, Text } from '@chakra-ui/react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import React, { useState, useCallback, useMemo, useContext } from 'react'
+import React, { useState, useCallback, useContext } from 'react'
 import { Head, MetaProps } from './Head'
 import { Button, Link, Text, useToast } from '@chakra-ui/react'
 import { getAddress } from 'ethers/lib/utils'
-import {
-  useAccount,
-  useContractRead,
-  useContractWrite,
-  usePrepareContractWrite,
-  useWaitForTransaction,
-} from 'wagmi'
-import { BigNumber, ethers } from 'ethers'
 import XmtpContext from '../../context/xmtp'
 import { SetNotesForm, SetRecieverForm, SetTokenForm } from '../form'
 import { OverlayDialog } from '../OverlayDialog'
 import { LoaderBar } from '../LoaderBar'
 import { TxnList } from '../TxnList'
-const WRAPPED_TOKEN_ABI = require('../../artifacts/contracts/WrappedToken.sol/WrappedToken.json')
-
-// WETH in Goerli
-// const GOERLI_CONTRACT_ADDRESS = '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6'
-const MOCK_TOKEN = '0xf38d32C01233eDAF3b61DAaD0eb598521688C3C6'
-const WRAPPED_TOKEN_ADDRESS = '0x02052ABEC1ccc18093022b6b648b9754201C7D5f'
-
+import { useSendFlow } from '../../hooks/useSendFlow'
 interface LayoutProps {
   children: React.ReactNode
   customMeta?: MetaProps
-}
-
-const LoadingOverlay = ({ props }: any): any => {
-  ;<div className="fixed bg-slate-900 w-full h-full text-white min-h-screen p-2">
-    loading
-  </div>
 }
 
 const SubmitForm = ({ props }: any): any => {
@@ -43,65 +23,8 @@ const SubmitForm = ({ props }: any): any => {
   const recipient = reciever_state.address
   const amount = token_state.amount
   const note = notes_state.notes
-  // merging
-
-  const { address } = useAccount()
   const { initClient, client } = useContext(XmtpContext)
   const toast = useToast()
-
-  const bigNumberAmount = useMemo(() => {
-    try {
-      return BigNumber.from(amount)
-    } catch (e) {
-      return undefined
-    }
-  }, [amount])
-
-  const validBigNumber = bigNumberAmount !== undefined
-  console.log(`validBigNumber: ${validBigNumber}`)
-
-  const validRecipient = useMemo(() => {
-    if (recipient.length === 0) {
-      return true
-    }
-
-    try {
-      ethers.utils.getAddress(recipient)
-      return true
-    } catch (_err) {
-      return false
-    }
-  }, [recipient])
-
-  // Get Token ID in ERC1155 (WrappedToken) from original ERC20 token address
-  const { data: erc20Id } = useContractRead({
-    address: WRAPPED_TOKEN_ADDRESS,
-    abi: WRAPPED_TOKEN_ABI.abi,
-    functionName: 'erc20TokenID',
-    args: [MOCK_TOKEN],
-  })
-
-  const { config } = usePrepareContractWrite({
-    address: WRAPPED_TOKEN_ADDRESS,
-    abi: WRAPPED_TOKEN_ABI.abi,
-    functionName: 'safeTransferFrom',
-    args: [
-      // from
-      address,
-      // to
-      recipient,
-      // id
-      erc20Id,
-      // amount
-      bigNumberAmount as BigNumber,
-      // data
-      ethers.utils.toUtf8Bytes('transfer'),
-    ],
-    enabled: validBigNumber && recipient.length > 0 && validRecipient,
-  })
-
-  const { data, write, error } = useContractWrite(config as any)
-  console.log(error)
 
   const sendXMPTMessage = async (message: string) => {
     if (!client) {
@@ -120,47 +43,52 @@ const SubmitForm = ({ props }: any): any => {
     setNotesState({ notes: '' })
   }
 
-  const { isLoading } = useWaitForTransaction({
-    hash: data?.hash,
-    onError(err) {
-      toast({
-        title: 'Transaction Failed',
-        description: (
-          <>
-            <Text>{`Something went wrong ${err}`}</Text>
-          </>
-        ),
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-      })
-    },
-    async onSuccess(data) {
-      console.log('success data', data)
-      toast({
-        title: 'Transaction Successful',
-        description: (
-          <>
-            <Text>Transfer Successful</Text>
-            <Text>
-              <Link
-                href={`https://goerli.etherscan.io/tx/${data?.blockHash}`}
-                isExternal
-              >
-                View on Etherscan
-              </Link>
-            </Text>
-          </>
-        ),
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-      })
+  const onSuccess = async (data: any) => {
+    console.log('success data', data)
+    toast({
+      title: 'Transaction Successful',
+      description: (
+        <>
+          <Text>Transfer Successful</Text>
+          <Text>
+            <Link
+              href={`https://goerli.etherscan.io/tx/${data?.blockHash}`}
+              isExternal
+            >
+              View on Etherscan
+            </Link>
+          </Text>
+        </>
+      ),
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
+    })
 
-      await sendXMPTMessage(`hash: ${data.transactionHash}, note: ${note}`)
-      resetInputs()
-    },
-  })
+    await sendXMPTMessage(`hash: ${data.transactionHash}, note: ${note}`)
+    resetInputs()
+  }
+
+  const onError = async (err: any) => {
+    toast({
+      title: 'Transaction Failed',
+      description: (
+        <>
+          <Text>{`Something went wrong ${err}`}</Text>
+        </>
+      ),
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
+    })
+  }
+
+  const { isLoading, write, error } = useSendFlow(
+    recipient,
+    amount,
+    onSuccess,
+    onError
+  )
 
   const submit = useCallback(async () => {
     // TODO queue these all at once somehow
