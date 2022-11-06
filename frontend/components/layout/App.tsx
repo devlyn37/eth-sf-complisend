@@ -143,14 +143,8 @@ const SubmitForm = ({ props }: any): any => {
 }
 
 const WithdrawForm = ({ props }: any): any => {
-  const [token_state, setTokenState] = useState({ amount: 0 })
-
-  const amount = token_state.amount
-  const toast = useToast()
-
-  const { address, isConnected } = useAccount()
-
-  let [withdraw_amount, setWithdrawAmount] = useState(0)
+  const [amount, setAmount] = useState(0)
+  const { address } = useAccount()
 
   return (
     <div className="bg-slate-900 p-4 rounded-md my-2">
@@ -162,9 +156,10 @@ const WithdrawForm = ({ props }: any): any => {
         <input
           className="bg-slate-800 p-6 text-lg"
           onChange={(e) => {
-            setWithdrawAmount(e.target.value as any)
+            const x = Number.parseFloat(e.target.value)
+            setAmount(Number.isNaN(x) ? 0 : x)
           }}
-          value={withdraw_amount}
+          value={amount}
         ></input>
       </div>
       <p>
