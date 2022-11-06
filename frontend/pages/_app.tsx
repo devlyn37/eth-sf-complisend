@@ -14,7 +14,7 @@ import XmtpProvider from '../providers/XmtpProvider'
 import './index.css'
 
 //@ts-ignore
-global.AUDITOR_ETH_ADDRESS = '0x9A8766D4A7C9bb69E536A5cAB873CeA647bE1dD8'
+global.AUDITOR_ETH_ADDRESS = '0xE898BBd704CCE799e9593a9ADe2c1cA0351Ab660'
 
 const devChains = [
   chain.goerli,
