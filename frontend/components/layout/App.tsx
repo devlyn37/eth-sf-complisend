@@ -229,7 +229,7 @@ export const App = ({ customMeta }: LayoutProps): JSX.Element => {
   return (
     <Layout>
       <Head customMeta={customMeta} />
-      <header className="bg-slate-800 w-full h-full overflow-y-scroll text-white min-h-screen p-2">
+      <header className="w-full h-full overflow-y-scroll text-white min-h-screen p-2">
         <div className="flex flex-col items-center">
           <WithdrawForm />
           <SubmitForm />

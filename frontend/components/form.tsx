@@ -4,7 +4,7 @@ import { WalletIcon } from '@heroicons/react/24/solid'
 import cn from 'classnames'
 
 interface TokenState {
-  amount: number
+  amount: number | undefined
 }
 export const SetTokenForm = ({
   state,
@@ -55,7 +55,7 @@ export const SetTokenForm = ({
   )
 }
 
-export const SetNotesForm = ({ state, onSet }: any): any => {
+export const SetNotesForm = ({ state={}, onSet }: any): any => {
   const [open_form, setFormOpen] = useState(false)
 
   const onSetNotesChange = (e: any) => {
@@ -91,7 +91,7 @@ let onAddrChange = function(e:any){
 } */
 }
 
-export const SetRecieverForm = ({ state, onSet }: any): any => {
+export const SetRecieverForm = ({ state={}, onSet }: any): any => {
   const [open_form, setFormOpen] = useState(false)
 
   const onSetAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
