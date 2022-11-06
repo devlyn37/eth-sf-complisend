@@ -3,13 +3,13 @@ import { OverlayDialog } from './OverlayDialog'
 import { WalletIcon,CurrencyDollarIcon,PencilSquareIcon} from '@heroicons/react/24/solid'
 import cn from 'classnames'
 
-export const SetTokenForm = ({ state, setState }: any): any => {
+export const SetTokenForm = ({ state, onSet }: any): any => {
   const [open_form, setFormOpen] = useState(false)
 
   const onSetAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const x = Number.parseFloat(event.target.value)
 
-    setState({
+    onSet({
       amount: Number.isNaN(x) ? 0 : x,
     })
   }
