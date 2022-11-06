@@ -6,9 +6,7 @@ import {useState} from 'react'
 export function ProgressBar({loading,progress=0}:any){
    
     let loader_bar_cn = cn({
-        'rounded-md h-3 bg-black/20 overflow-hidden':true,
-        'w-full': !loading,
-        'w-full':loading,
+        'w-full rounded-md h-3 bg-black/20 overflow-hidden':true,
     })
 
     let progress_dot_cn = cn({
