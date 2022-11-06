@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import { Layout } from '../components/layout/Layout'
-import { Sendform } from '../components/sendForm'
+import { Sendform } from '../components/SendingForm'
 import { WithdrawForm } from '../components/WithdrawForm'
 import { Head } from '../components/layout/Head'
 
