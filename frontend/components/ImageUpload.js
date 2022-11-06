@@ -1,4 +1,4 @@
-export const ImageUpload = ({}: any): any => {
+export const ImageUpload = ()=> {
 	function captureFile (event){
 		event.preventDefault()
 		const file = event.target.files[0]
