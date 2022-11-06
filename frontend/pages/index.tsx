@@ -8,7 +8,7 @@ const Home: NextPage = () => {
   return (
     <Layout>
       <Head />
-      <div className="flex flex-col items-center w-1/2">
+      <div className="flex flex-col">
         <WithdrawForm />
         <Sendform />
         <div className="p-4"></div>

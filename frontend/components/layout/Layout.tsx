@@ -47,12 +47,13 @@ export const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
             </ActiveLink>}
         </div>
         
-        <div className="bg-slate-800 p-4 rounded-md">
+        <div className="bg-slate-800 p-4 rounded-md flex flex-row">
+          {connectedOwnsNFT == false && <div className='rounded-md bg-red-500 text-white self-center w-fit mr-3 p-1 px-3 flex flex-row items-center'><ShieldExclamationIcon className='w-12 p-2'/><strong className='pr-4'>unverified</strong></div>}
+          {connectedOwnsNFT == true && <div className='rounded-md bg-green-500 text-black self-center w-fit mr-3 p-1 px-3 flex flex-row items-center content-center'><CheckCircleIcon className='w-12 p-2'/><strong className='pr-4'>verified</strong></div>}
+          {/* <div>{`owns NFT: ${connectedOwnsNFT}`}</div> */}
           <ConnectButton />
         </div>
-        {connectedOwnsNFT == false && <div className='rounded-md bg-red-500 text-white self-center w-fit m-4 p-2 px-8 flex flex-row items-center'><ShieldExclamationIcon className='w-12 p-2'/><strong className='pr-4'>wallet unverified</strong></div>}
-        {connectedOwnsNFT == true && <div className='rounded-md bg-green-500 text-black self-center w-fit m-4 p-2 px-8 flex flex-row items-center content-center'><CheckCircleIcon className='w-12 p-2'/><strong className='pr-4'>wallet verified</strong></div>}
-        {/* <div>{`owns NFT: ${connectedOwnsNFT}`}</div> */}
+        
         {children}
       </div>
 

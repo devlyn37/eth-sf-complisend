@@ -16,7 +16,7 @@ export const Txn = ({ from,to,txn }: any): any => {
   }
   // console.log(from)
   return (
-    <div className="flex rounded-md bg-slate-800 m-2 flex-col w-full p-4">
+    <div className="flex rounded-md bg-slate-800 my-2 flex-col w-full p-4">
       {/* {txn.ipfs && <img className='p-2'><span className='text-slate-700 font-bold'>tnx # </span><span>{txn.hash}</span></div>} */}
       
       <div className='text-4xl flex flex-row font-black'><div className='mr-1 text-slate-400'>$</div><span className='text-white'>{txn.amount}</span></div>

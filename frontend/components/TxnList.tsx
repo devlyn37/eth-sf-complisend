@@ -53,7 +53,7 @@ export const TxnList = ({ props }: any): any => {
 
   return (
     <div className="flex flex-col items-left w-full">
-      <div className="flex w-fit flex-row rounded-md font-black bg-slate-800 overflow-hidden items-start content-start cursor-pointer mt-2 mb-3">
+      <div className="flex w-fit flex-row rounded-md font-black bg-slate-800 overflow-hidden items-start content-start cursor-pointer mt-12 mb-1">
         <div
           onClick={setFilter.bind(null, 'sent')}
           className={
@@ -81,9 +81,9 @@ export const TxnList = ({ props }: any): any => {
       </div>
       {loadingConversations && <div className='pt-4'><LoaderBar loading={loadingConversations}></LoaderBar></div>}
       <div className='w-full flex flex-col align-center items-center justify-center'>
-        <div className='w-full flex flex-col align-center items-center justify-center w-1/2'>
-          {trx_list}
-        </div>
+        {/* <div className='w-full flex flex-col align-center items-center justify-center w-1/2'> */}
+        {trx_list}
+        {/* </div> */}
       </div>
     </div>
   )
