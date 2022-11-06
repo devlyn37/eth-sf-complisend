@@ -10,6 +10,7 @@ import { OverlayDialog } from './OverlayDialog'
 import {ImageUpload} from './ImageUpload'
 import { Identity } from "@semaphore-protocol/identity"
 
+
 const AUDITOR_ETH_ADDRESS = '0x9A8766D4A7C9bb69E536A5cAB873CeA647bE1dD8'
 
 export const Sendform = ({ props }: any): any => {

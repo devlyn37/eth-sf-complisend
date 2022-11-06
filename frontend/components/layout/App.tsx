@@ -32,7 +32,6 @@ const SubmitForm = ({ props }: any): any => {
   const note = notes_state.notes
   const { initClient, sendMessage, client } = useContext(XmtpContext)
   const toast = useToast()
-  
 
   const onTxnSuccess = (data: any) => {
     console.log('success data', data)
@@ -116,10 +115,8 @@ const SubmitForm = ({ props }: any): any => {
 
   return (
     <>
-     <div className="bg-slate-800 p-4 rounded-md my-2 w-full">
-      <div className="text-green-400 text-lg uppercase font-black">
-        send
-      </div>
+      <div className="bg-slate-800 p-4 rounded-md my-2 w-full">
+        <div className="text-green-400 text-lg uppercase font-black">send</div>
         <div className="m-2">
           <SetTokenForm
             state={token_state}
@@ -141,9 +138,6 @@ const SubmitForm = ({ props }: any): any => {
         <div className="m-2">
           <ImageUpload onSet={setImageState}></ImageUpload>
         </div>
-        
-
-        
 
         <div className="w-full p-4 flex items-center justify-center">
           <Button
@@ -228,16 +222,13 @@ const WithdrawForm = ({ props }: any): any => {
 
   return (
     <div className="bg-slate-800 p-4 rounded-md my-2 w-full">
-      <div className="text-blue-400 text-lg uppercase font-black">
-        withdraw
-      </div>
+      <div className="text-blue-400 text-lg uppercase font-black">withdraw</div>
       <div className="text-white text-sm uppercase font-black">
         Current Balance {balance}
       </div>
       <div className="flex flex-col">
         amount
         <input
-
           className="bg-slate-700 p-6 text-lg rounded-lg"
           onChange={handleChange}
           value={amount}
