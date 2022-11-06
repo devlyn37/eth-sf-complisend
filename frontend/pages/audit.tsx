@@ -11,9 +11,9 @@ const Audit: NextPage = () => {
   const {} = useAccount()
   let [xmtp_connected, setXMTPConnected] = useState(false)
 
-  useEffect(() => {
-    initClient()
-  }, [initClient])
+  // useEffect(() => {
+  //   initClient()
+  // }, [initClient])
 
   useEffect(() => {
     if (client) {

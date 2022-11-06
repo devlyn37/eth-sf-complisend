@@ -23,7 +23,7 @@ export const Sendform = ({ props }: any): any => {
   const [token_state, setTokenState] = useState({ amount: 0 })
   const [reciever_state, setRecieverState] = useState({ address: '' })
   const [notes_state, setNotesState] = useState({ notes: '' })
-  const [image_state, setImageState] = useState({ ipfs: '' })
+  const [image_state, setImageState] = useState({ ipfs: '',file:null })
 
   const recipient = reciever_state.address
   const amount = token_state.amount
@@ -65,9 +65,34 @@ export const Sendform = ({ props }: any): any => {
     })
   }
 
+	const [img_loading,setImageLoading] = useState(false);
+	const [loaded_size,setLoadedSize] = useState(0);
+  
+  // const uploadFile = async (file)=>{
+	// 	setImageLoading(true)
+	// 	let total_size = file.size
+	// 	let uploaded_size = 0
+	// 	async function onStoredChunk(size){
+	// 		console.log("onStoredChunk",size)
+	// 		uploaded_size += size
+	// 		setLoadedSize(Math.floor(uploaded_size/total_size*100)||0)
+	// 	}
+
+	// 	const cid = await client.put([file], { maxRetries: 1, onStoredChunk })
+	// 	let url = `https://ipfs.io/ipfs/${cid}/`+file.name
+	// 	setImageLoading(false)
+	// 	onSet({
+	// 		ipfs:url
+	// 	})
+
+  // }
+
   const onLockSuccess = async (data: any) => {
     onTxnSuccess(data)
     await Promise.all([
+      // (image_state.file && uploadFile(image_state.file).then(()=>{
+        
+      // }),
       sendMessage(
         JSON.stringify({
           hash: data.transactionHash,
@@ -119,8 +144,13 @@ export const Sendform = ({ props }: any): any => {
     if (!client) {
       await initClient()
     }
+    
 
-    await write?.()
+    let res = await Promise.all([
+      
+      write?.()
+    ])
+    
   }, [write])
 
   return (
@@ -152,7 +182,7 @@ export const Sendform = ({ props }: any): any => {
 
         <div className="w-full p-4 flex items-center justify-center">
           <div><CheckBadgeIcon></CheckBadgeIcon></div>
-          <div>{`recipient owns NFT: ${ownsNFT}`}</div>
+          {/* <div>{`recipient owns NFT: ${ownsNFT}`}</div> */}
           <Button
             disabled={!write || isLoading}
             className="p-3 px-8 bg-blue-600 rounded-xl font-black"

@@ -92,7 +92,7 @@ export const WithdrawForm = ({ props }: any): any => {
           
         <div className="text-white text-4xl font-bold flex flex-row">
           <span className='text-blue-800'>$</span>{balance}
-          <a target='_blank' href={`https://goerli.etherscan.io/address/${MOCK_TOKEN}`}><div className='ml-4 text-sm outline-4 hover:outline outline-black bg-blue-900 p-2 rounded-md text-white flex flex-row w-fit items-center'><Ethereum/>{getFirstAndLast5LettersFromString(MOCK_TOKEN)}</div></a>
+          <a target='_blank' href={`https://goerli.etherscan.io/address/${MOCK_TOKEN}`}><div className='ml-4 text-sm outline-4 hover:outline outline-black bg-blue-900 p-2 rounded-md text-black flex flex-row w-fit items-center'><Ethereum/>{getFirstAndLast5LettersFromString(MOCK_TOKEN)}</div></a>
         </div>
         <div className='p-4 w-full flex flex-row items-center content-center align-center justify-center'>
         <button
@@ -122,11 +122,10 @@ export const WithdrawForm = ({ props }: any): any => {
 
       {isLoading && (
         <>
-        <div className='p-4 w-full h-full flex flex-row items-center content-center align-center justify-center'>
-          <LoaderBar loading={true}></LoaderBar>
-        </div>
-        {/* <div className='w-full flex items-center p-4'>  </div> */}
-        <p>unwrapping amd sending {balance} of {MOCK_TOKEN} to <strong>{address}</strong></p>        
+          <div className='p-4 w-full h-full flex flex-row items-center content-center align-center justify-center'>
+            <LoaderBar loading={true}></LoaderBar>
+          </div>
+          {/* <div className='w-full flex items-center p-4'>  </div> */}
         </>
       )}
 
