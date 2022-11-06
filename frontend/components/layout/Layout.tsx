@@ -23,6 +23,14 @@ export const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
   //@ts-ignore
   const is_auditor = (String(address) == AUDITOR_ETH_ADDRESS)
 
+  const verifiedBadge = (label:string,verified:boolean) => {
+    if (!verified){
+      return <div className='rounded-md bg-red-500 text-white self-center w-fit mr-3 p-1 px-3 flex flex-row items-center'><ShieldExclamationIcon className='w-12 p-2'/><strong className='pr-4'>{label}</strong></div>
+    }else{
+      return <div className='rounded-md bg-green-500 text-black self-center w-fit mr-3 p-1 px-3 flex flex-row items-center content-center'><CheckCircleIcon className='w-12 p-2'/><strong className='pr-4'>{label}</strong></div>
+    }
+  }
+
   return (
     <div className="bg-slate-900 w-full min-h-screen overflow-y-scroll text-white min-h-screen p-4 w-full items-center flex flex-col content-center min-h-screen">
       <Head customMeta={customMeta} />
@@ -47,13 +55,21 @@ export const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
             </ActiveLink>}
         </div>
         
-        <div className="bg-slate-800 p-4 rounded-md flex flex-row">
-          {connectedOwnsNFT == false && <div className='rounded-md bg-red-500 text-white self-center w-fit mr-3 p-1 px-3 flex flex-row items-center'><ShieldExclamationIcon className='w-12 p-2'/><strong className='pr-4'>unverified</strong></div>}
-          {connectedOwnsNFT == true && <div className='rounded-md bg-green-500 text-black self-center w-fit mr-3 p-1 px-3 flex flex-row items-center content-center'><CheckCircleIcon className='w-12 p-2'/><strong className='pr-4'>verified</strong></div>}
+        <div className="bg-slate-800 p-4 rounded-md flex flex-col">
           {/* <div>{`owns NFT: ${connectedOwnsNFT}`}</div> */}
           <ConnectButton />
+          
         </div>
-        
+        <div className='w-full flex flex-col mt-2 bg-slate-800 p-4 rounded-md my-2 w-full mt-5'>
+          <div className="text-slate-500 text-lg uppercase font-black mb-4">
+            verified status
+          </div>
+          <div className='w-full flex flex-row w-full items-center justify-center'>
+            {verifiedBadge('kyc',connectedOwnsNFT)}
+            {verifiedBadge('wallet',connectedOwnsNFT)}
+            {verifiedBadge('token',connectedOwnsNFT)}
+          </div>      
+        </div>  
         {children}
       </div>
 

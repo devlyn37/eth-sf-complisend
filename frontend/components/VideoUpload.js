@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 const WEB3_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEUwNzY0ZkMzMkM5ZTQwQjIyMkQwNjE1NzBkMTJkODlENzMxMDcyNkQiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2Njc3MTMzMDQwMzksIm5hbWUiOiJldGhnbG9iYWwifQ.aeOrkh_4IAx4SwMjWDotoZYlWwB-HcODQqSLBRp3X0A'
-import {PhotoIcon} from '@heroicons/react/24/solid'
+import {PhotoIcon, VideoCameraIcon} from '@heroicons/react/24/solid'
 import { Web3Storage } from 'web3.storage'
 import cn from 'classnames'
 import { LoaderBar,ProgressBar } from './LoaderBar'
@@ -9,7 +9,7 @@ import { LoaderBar,ProgressBar } from './LoaderBar'
 const client = new Web3Storage({ token: WEB3_TOKEN })
 
 
-export const ImageUpload = ({onSet}) => {
+export const VideoUpload = ({onSet}) => {
 	const [id, setId] = useState(null);
 	const [ipfs, setIpfs] = useState(null);
 	const [version, setVersion] = useState(null);
@@ -66,11 +66,11 @@ export const ImageUpload = ({onSet}) => {
 			outline: is_focus,
 		})}
 		>
-		<PhotoIcon className={cn({ 'w-10 text-green-700': true })}></PhotoIcon>IPFS
+		<VideoCameraIcon className={cn({ 'w-10 text-green-700': true })}></VideoCameraIcon>LIVEPEER
 		{img_url && <img className='w-10 h-auto' src={img_url} alt=""/>}
 		
 		<input
-			className="bg-transparent p-4 text-xl font-bold text-green-700 w-full rounded-lg outline-none"
+			className="bg-transparent p-4 text-xl font-bold text-green-800 w-full rounded-lg outline-none"
 			onChange={captureFile}
 			autoComplete="on"
 			type='file'

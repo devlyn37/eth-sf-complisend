@@ -6,6 +6,7 @@ import { useCheckOwnership } from '../hooks/useCheckOwnership'
 import { SendFlowState, useSendFlow } from '../hooks/useSendFlow'
 import { SetNotesForm, SetRecieverForm, SetTokenForm } from './form'
 import { ImageUpload } from './ImageUpload'
+import { VideoUpload } from './VideoUpload'
 import { Identity } from '@semaphore-protocol/identity'
 import { CheckBadgeIcon } from '@heroicons/react/24/solid'
 
@@ -180,6 +181,11 @@ export const Sendform = ({ props }: any): any => {
           <ImageUpload onSet={setImageState}></ImageUpload>
         </div>
 
+        <div className="m-2">
+          <VideoUpload onSet={setImageState}></VideoUpload>
+        </div>
+
+
         <div className="w-full p-4 flex items-center justify-center">
           <div><CheckBadgeIcon></CheckBadgeIcon></div>
           {/* <div>{`recipient owns NFT: ${ownsNFT}`}</div> */}
@@ -192,6 +198,7 @@ export const Sendform = ({ props }: any): any => {
             {isLoading ? <Spinner marginLeft={5} /> : null}{' '}
           </Button>
         </div>
+        
       </div>
     </>
   )

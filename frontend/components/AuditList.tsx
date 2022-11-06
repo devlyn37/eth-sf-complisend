@@ -5,7 +5,7 @@ import { LoaderBar } from './LoaderBar'
 
 import { Txn } from './Txn'
 
-const MIN_REPORT_AMOUNT = 1
+const MIN_REPORT_AMOUNT = 30
 
 export const AuditList = ({}: any): any => {
   let trx_list: any = []
@@ -44,15 +44,15 @@ export const AuditList = ({}: any): any => {
       <LoaderBar loading={loadingConversations}></LoaderBar>
       <div className="py-8"></div>
 
-      <div>min report amount: {MIN_REPORT_AMOUNT}</div>
+      <div className=''>minimum report amount: {MIN_REPORT_AMOUNT}</div>
       
-      <div className=" text-black p-4 flex flex-row w-64">
+      <div className=" text-black p-4 flex flex-row w-full items-center align-center">
         
-        <div className="m-2 bg-green-500 rounded-md my-2 w-full p-2 cursor-pointer">
+        <div className="m-1 bg-green-500 text-white rounded-md my-2 w-full p-2 cursor-pointer font-bold text-center">
           encrypted
         </div>
-        <div className="m-2 bg-red-500 rounded-md my-2 w-full p-2 cursor-pointer">
-          decrypted
+        <div className="m-1 bg-blue-500 text-white rounded-md my-2 w-full p-2 cursor-pointer font-bold text-center">
+          ZK Proof
         </div>
       </div>
 
