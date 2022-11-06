@@ -19,7 +19,11 @@ describe("WrappedToken", () => {
       const wrappedTokenFactory = await ethers.getContractFactory(
         "WrappedToken"
       );
-      wrappedToken = await wrappedTokenFactory.deploy("0x" + "0".repeat(40));
+      wrappedToken = await wrappedTokenFactory.deploy(
+        ethers.constants.AddressZero,
+        ethers.constants.AddressZero,
+        ethers.constants.AddressZero
+      );
     });
 
     it("should lock token", async () => {
@@ -185,7 +189,11 @@ describe("WrappedToken", () => {
       const wrappedTokenFactory = await ethers.getContractFactory(
         "WrappedToken"
       );
-      wrappedToken = await wrappedTokenFactory.deploy("0x" + "0".repeat(40));
+      wrappedToken = await wrappedTokenFactory.deploy(
+        ethers.constants.AddressZero,
+        ethers.constants.AddressZero,
+        ethers.constants.AddressZero
+      );
     });
 
     it("should lock token", async () => {
