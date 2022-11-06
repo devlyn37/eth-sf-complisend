@@ -13,6 +13,9 @@ import { publicProvider } from 'wagmi/providers/public'
 import XmtpProvider from '../providers/XmtpProvider'
 import './index.css'
 
+//@ts-ignore
+global.AUDITOR_ETH_ADDRESS = '0x9A8766D4A7C9bb69E536A5cAB873CeA647bE1dD8'
+
 const devChains = [
   chain.goerli,
   chain.polygonMumbai,

@@ -5,16 +5,15 @@ import { AuditList } from '../components/AuditList'
 import { Layout } from '../components/layout/Layout'
 import XmtpContext from '../context/xmtp'
 
-const AUDITOR_ETH_ADDRESS = '0x9A8766D4A7C9bb69E536A5cAB873CeA647bE1dD8'
 
 const Audit: NextPage = () => {
   const { initClient, client } = useContext(XmtpContext)
   const {} = useAccount()
   let [xmtp_connected, setXMTPConnected] = useState(false)
 
-  useEffect(() => {
-    initClient()
-  }, [initClient])
+  // useEffect(() => {
+  //   initClient()
+  // }, [initClient])
 
   useEffect(() => {
     if (client) {
@@ -24,9 +23,9 @@ const Audit: NextPage = () => {
 
   return (
     <Layout>
-      <div className='flex-col flex p-4'>
+      <div className='flex-col flex'>
         {(xmtp_connected && (
-          <div className="p-4">
+          <div className="">
             <AuditList />
           </div>
         )) || (
