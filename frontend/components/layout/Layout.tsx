@@ -10,7 +10,7 @@ interface LayoutProps {
 }
 
 export const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
-  return (<div className='bg-black text-white'>
+  return (<div className='bg-slate-800 text-white'>
       <Head customMeta={customMeta} />
       <h1 className="text-center p-6 text-4xl font-bold gradient-text">
         COMPLISEND
