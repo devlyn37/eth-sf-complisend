@@ -3868,11 +3868,6 @@ crypto-browserify@3.12.0:
     randombytes "^2.0.0"
     randomfill "^1.0.3"
 
-crypto-icons-plus@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/crypto-icons-plus/-/crypto-icons-plus-1.0.1.tgz"
-  integrity sha512-IcgUUuCinyzPRmJAsVxfCswvIfjx2BbEiM6MegYw/RI8Jxejz5FaVdn+gDwK+nNXMcixq8TdLYWe2AisW0d4Rg==
-
 cryptocons@^1.3.3:
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/cryptocons/-/cryptocons-1.3.3.tgz#dd7dd36dfed4caed94f3b63ac2280631d4582a56"
