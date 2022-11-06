@@ -37,7 +37,7 @@ const Home: NextPage = () => {
   }, [amount])
 
   const validBigNumber = bigNumberAmount !== undefined
-  console.log(`validBigNumber: ${validBigNumber}`)
+  // console.log(`validBigNumber: ${validBigNumber}`)
 
   const validRecipient = useMemo(() => {
     if (recipient.length === 0) {
@@ -80,7 +80,7 @@ const Home: NextPage = () => {
   })
 
   const { data, write, error } = useContractWrite(config as any)
-  console.log(error)
+  // console.log(error)
 
   const { isLoading } = useWaitForTransaction({
     hash: data?.hash,
