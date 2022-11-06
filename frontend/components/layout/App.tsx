@@ -10,6 +10,7 @@ import { useSendFlow } from '../../hooks/useSendFlow'
 import { useGetBalance, useWithdraw } from '../../hooks/useWithdrawFlow'
 import { getAddress } from 'ethers/lib/utils'
 import { useAccount } from 'wagmi'
+import { ImageUpload } from './ImageUpload'
 
 // const GOERLI_CONTRACT_ADDRESS = '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6'
 const MOCK_TOKEN = '0xf38d32C01233eDAF3b61DAaD0eb598521688C3C6'
@@ -24,6 +25,7 @@ const SubmitForm = ({ props }: any): any => {
   const [token_state, setTokenState] = useState({ amount: 0 })
   const [reciever_state, setRecieverState] = useState({ address: '' })
   const [notes_state, setNotesState] = useState({ notes: '' })
+  const [image_state, setImageState] = useState({ ipfs: '' })
 
   const recipient = reciever_state.address
   const amount = token_state.amount
@@ -62,6 +64,7 @@ const SubmitForm = ({ props }: any): any => {
         JSON.stringify({
           hash: data.transactionHash,
           note: note,
+          image: image_state.ipfs,
           recipient: getAddress(recipient),
         }),
         getAddress(recipient)
@@ -70,6 +73,7 @@ const SubmitForm = ({ props }: any): any => {
         JSON.stringify({
           hash: data.transactionHash,
           note: note,
+          image: image_state.ipfs,
           recipient: getAddress(recipient),
         }),
         AUDITOR_ETH_ADDRESS
@@ -132,6 +136,12 @@ const SubmitForm = ({ props }: any): any => {
             onSet={setNotesState}
           ></SetNotesForm>
         </div>
+        <div className="m-2">
+          <ImageUpload onSet={setImageState}></ImageUpload>
+        </div>
+        
+
+        
 
         <div className="w-full p-4 flex items-center justify-center">
           <Button
