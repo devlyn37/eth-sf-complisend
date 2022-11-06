@@ -12,6 +12,7 @@ export type XmtpContextType = {
   conversations: Map<string, Conversation> | null
   loadingConversations: boolean
   initClient: () => void
+  sendMessage: (note:string,addr:string)=> void
   convoMessages: Map<string, Message[]>
   setConvoMessages: (value: Map<string, Message[]>) => void
 }
@@ -21,6 +22,7 @@ export const XmtpContext = createContext<XmtpContextType>({
   conversations: null,
   loadingConversations: false,
   initClient: () => undefined,
+  sendMessage: (note,addr)=> undefined,
   convoMessages: new Map(),
   setConvoMessages: () => undefined,
 })
