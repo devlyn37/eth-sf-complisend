@@ -1,30 +1,18 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { OverlayDialog } from './OverlayDialog'
 import { WalletIcon } from '@heroicons/react/24/solid'
 import cn from 'classnames'
 
-interface TokenState {
-  amount: number | undefined
-}
-export const SetTokenForm = ({
-  state,
-  onSet,
-}: {
-  state: TokenState
-  onSet: (state: TokenState) => void
-}): any => {
+export const SetTokenForm = ({ state, setState }: any): any => {
   const [open_form, setFormOpen] = useState(false)
 
-  const onSetAmountChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const x = Number.parseFloat(event.target.value)
+  const onSetAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const x = Number.parseFloat(event.target.value)
 
-      onSet({
-        amount: Number.isNaN(x) ? 0 : x,
-      })
-    },
-    []
-  )
+    setState({
+      amount: Number.isNaN(x) ? 0 : x,
+    })
+  }
 
   const onSubmit = (e: any) => {
     e.preventDefault()
@@ -55,7 +43,7 @@ export const SetTokenForm = ({
   )
 }
 
-export const SetNotesForm = ({ state={}, onSet }: any): any => {
+export const SetNotesForm = ({ state = {}, onSet }: any): any => {
   const [open_form, setFormOpen] = useState(false)
 
   const onSetNotesChange = (e: any) => {
@@ -91,7 +79,7 @@ let onAddrChange = function(e:any){
 } */
 }
 
-export const SetRecieverForm = ({ state={}, onSet }: any): any => {
+export const SetRecieverForm = ({ state = {}, onSet }: any): any => {
   const [open_form, setFormOpen] = useState(false)
 
   const onSetAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {

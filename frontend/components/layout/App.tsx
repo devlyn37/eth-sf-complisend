@@ -1,16 +1,13 @@
 // import { Container, Flex, Link, SimpleGrid, Text } from '@chakra-ui/react'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
-import React, { useState, useCallback, useContext, useEffect } from 'react'
+import React, { useState, useCallback, useContext } from 'react'
 import { Head, MetaProps } from './Head'
 import { Button, Link, Text, useToast } from '@chakra-ui/react'
 import XmtpContext from '../../context/xmtp'
 import { SetNotesForm, SetRecieverForm, SetTokenForm } from '../form'
 import { OverlayDialog } from '../OverlayDialog'
 import { LoaderBar } from '../LoaderBar'
-import { TxnList } from '../TxnList'
 import { useSendFlow } from '../../hooks/useSendFlow'
 import { getAddress } from 'ethers/lib/utils'
-import cn from 'classnames'
 import { useAccount } from 'wagmi'
 
 interface LayoutProps {
@@ -28,12 +25,6 @@ const SubmitForm = ({ props }: any): any => {
   const note = notes_state.notes
   const { initClient, sendMessage, client } = useContext(XmtpContext)
   const toast = useToast()
-
-  // const resetInputs = () => {
-  //   setRecieverState({ address: '' })
-  //   setTokenState({ amount: 0 })
-  //   setNotesState({ notes: '' })
-  // }
 
   const onTxnSuccess = (data: any) => {
     console.log('success data', data)
@@ -94,7 +85,7 @@ const SubmitForm = ({ props }: any): any => {
     })
   }
 
-  const { isLoading, write, error, state } = useSendFlow(
+  const { isLoading, write, state } = useSendFlow(
     recipient,
     amount,
     onTxnSuccess,
@@ -153,16 +144,11 @@ const SubmitForm = ({ props }: any): any => {
 
 const WithdrawForm = ({ props }: any): any => {
   const [token_state, setTokenState] = useState({ amount: 0 })
-  const [reciever_state, setRecieverState] = useState({ address: '' })
-  const [notes_state, setNotesState] = useState({ notes: '' })
 
-  const recipient = reciever_state.address
   const amount = token_state.amount
-  const note = notes_state.notes
-  const { initClient, sendMessage, client } = useContext(XmtpContext)
   const toast = useToast()
 
-  const { address, isConnecting, isDisconnected } = useAccount()
+  const { address, isConnected } = useAccount()
 
   let [withdraw_amount, setWithdrawAmount] = useState(0)
 
@@ -193,39 +179,10 @@ const WithdrawForm = ({ props }: any): any => {
   )
 }
 
-// const AuthForm = ({ props }: any): any => {
-//   return (
-//     <>
-//       <div className={'bg-slate-900 rounded-md p-5 w-full'}>
-//         <ConnectButton />
-//       </div>
-//     </>
-//   )
-// }
-
 const AUDITOR_ETH_ADDRESS = '0x9A8766D4A7C9bb69E536A5cAB873CeA647bE1dD8'
-import { AuditList } from '../AuditList'
 import { Layout } from './Layout'
 
 export const App = ({ customMeta }: LayoutProps): JSX.Element => {
-  const { convoMessages, initClient, client } = useContext(XmtpContext)
-  const { address, isConnecting, isDisconnected } = useAccount()
-  // console.log(address,isConnecting,isDisconnected,convoMessages)
-  let [xmtp_connected, setXMTPConnected] = useState(false)
-  let [wallet_connectd, setWalletConnected] = useState(false)
-
-  useEffect(() => {
-    if (client) {
-      setXMTPConnected(true)
-    }
-  }, [client])
-
-  useEffect(() => {
-    if (address) {
-      setWalletConnected(true)
-    }
-  }, [address])
-
   return (
     <Layout>
       <Head customMeta={customMeta} />
