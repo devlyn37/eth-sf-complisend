@@ -1,0 +1,22 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "KYCVerifier",
+  "sourceName": "contracts/KYCVerifier.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "contract IBalanceOf",
+          "name": "kycToken",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    }
+  ],
+  "bytecode": "0x6080604052348015600f57600080fd5b5060405160c838038060c8833981016040819052602a91604e565b600080546001600160a01b0319166001600160a01b0392909216919091179055607c565b600060208284031215605f57600080fd5b81516001600160a01b0381168114607557600080fd5b9392505050565b603f8060896000396000f3fe6080604052600080fdfea26469706673582212202913651cd79f126b3d6e78462ee174a119ce15fb2e5e14e3570a0f2b3001836564736f6c63430008110033",
+  "deployedBytecode": "0x6080604052600080fdfea26469706673582212202913651cd79f126b3d6e78462ee174a119ce15fb2e5e14e3570a0f2b3001836564736f6c63430008110033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

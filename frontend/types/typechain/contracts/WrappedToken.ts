@@ -30,7 +30,6 @@ import type {
 export interface WrappedTokenInterface extends utils.Interface {
   functions: {
     "_channelAddress()": FunctionFragment;
-    "_kycToken()": FunctionFragment;
     "_push()": FunctionFragment;
     "balanceOf(address,uint256)": FunctionFragment;
     "balanceOfBatch(address[],uint256[])": FunctionFragment;
@@ -59,7 +58,6 @@ export interface WrappedTokenInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "_channelAddress"
-      | "_kycToken"
       | "_push"
       | "balanceOf"
       | "balanceOfBatch"
@@ -89,7 +87,6 @@ export interface WrappedTokenInterface extends utils.Interface {
     functionFragment: "_channelAddress",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "_kycToken", values?: undefined): string;
   encodeFunctionData(functionFragment: "_push", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "balanceOf",
@@ -206,7 +203,6 @@ export interface WrappedTokenInterface extends utils.Interface {
     functionFragment: "_channelAddress",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "_kycToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "_push", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
@@ -463,8 +459,6 @@ export interface WrappedToken extends BaseContract {
   functions: {
     _channelAddress(overrides?: CallOverrides): Promise<[string]>;
 
-    _kycToken(overrides?: CallOverrides): Promise<[string]>;
-
     _push(overrides?: CallOverrides): Promise<[string]>;
 
     balanceOf(
@@ -599,8 +593,6 @@ export interface WrappedToken extends BaseContract {
 
   _channelAddress(overrides?: CallOverrides): Promise<string>;
 
-  _kycToken(overrides?: CallOverrides): Promise<string>;
-
   _push(overrides?: CallOverrides): Promise<string>;
 
   balanceOf(
@@ -734,8 +726,6 @@ export interface WrappedToken extends BaseContract {
 
   callStatic: {
     _channelAddress(overrides?: CallOverrides): Promise<string>;
-
-    _kycToken(overrides?: CallOverrides): Promise<string>;
 
     _push(overrides?: CallOverrides): Promise<string>;
 
@@ -998,8 +988,6 @@ export interface WrappedToken extends BaseContract {
   estimateGas: {
     _channelAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
-    _kycToken(overrides?: CallOverrides): Promise<BigNumber>;
-
     _push(overrides?: CallOverrides): Promise<BigNumber>;
 
     balanceOf(
@@ -1134,8 +1122,6 @@ export interface WrappedToken extends BaseContract {
 
   populateTransaction: {
     _channelAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    _kycToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     _push(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
