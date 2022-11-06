@@ -1,7 +1,7 @@
 // import { Container, Flex, Link, SimpleGrid, Text } from '@chakra-ui/react'
 import React, { useState, useCallback, useContext } from 'react'
 import { Head, MetaProps } from './Head'
-import { Button, Link, Text, useToast } from '@chakra-ui/react'
+import { Button, Link, Spinner, Text, useToast } from '@chakra-ui/react'
 import XmtpContext from '../../context/xmtp'
 import { SetNotesForm, SetRecieverForm, SetTokenForm } from '../form'
 import { OverlayDialog } from '../OverlayDialog'
@@ -235,7 +235,7 @@ const WithdrawForm = ({ props }: any): any => {
           className="p-3 px-8 bg-blue-600 rounded-xl font-black"
           onClick={submit}
         >
-          Withdraw
+          {isLoading ? <Spinner /> : 'Withdraw'}
         </Button>
       </div>
     </div>
