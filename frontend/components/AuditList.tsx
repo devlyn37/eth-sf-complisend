@@ -25,7 +25,7 @@ export const AuditList = ({}: any): any => {
               return
             }
             if(txn.amount && txn.amount > MIN_REPORT_AMOUNT) {
-              trx_list.push(<Txn key={msg.id} txn={txn} />)
+              trx_list.push(<Txn from={msg.senderAddress} to={(msg as any).recipientAddress} key={msg.id} txn={txn} />)
               keys_used[txn.hash] = true
             }
           } catch (e) {

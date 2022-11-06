@@ -23,9 +23,9 @@ const Audit: NextPage = () => {
 
   return (
     <Layout>
-      <div className='flex-col flex p-4'>
+      <div className='flex-col flex'>
         {(xmtp_connected && (
-          <div className="p-4">
+          <div className="">
             <AuditList />
           </div>
         )) || (

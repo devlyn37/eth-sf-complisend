@@ -22,7 +22,7 @@ const History: NextPage = () => {
   return (
     <Layout>
       {(xmtp_connected && (
-        <div className="p-4">
+        <div className="">
           <TxnList />
         </div>
       )) || (

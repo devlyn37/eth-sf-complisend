@@ -7,8 +7,9 @@ import { SendFlowState, useSendFlow } from '../hooks/useSendFlow'
 import { SetNotesForm, SetRecieverForm, SetTokenForm } from './form'
 import { ImageUpload } from './ImageUpload'
 import { Identity } from '@semaphore-protocol/identity'
+import { CheckBadgeIcon } from '@heroicons/react/24/solid'
 
-const AUDITOR_ETH_ADDRESS = '0x9A8766D4A7C9bb69E536A5cAB873CeA647bE1dD8'
+
 const ButtonTextMap = new Map([
   [SendFlowState.needsInput, 'Fill out details First'],
   [SendFlowState.needAllowance, 'Allow Contract To Trade Tokens'],
@@ -84,6 +85,7 @@ export const Sendform = ({ props }: any): any => {
           amount: amount,
           recipient: getAddress(recipient),
         }),
+        //@ts-ignore
         AUDITOR_ETH_ADDRESS
       ),
     ])
@@ -147,6 +149,7 @@ export const Sendform = ({ props }: any): any => {
         </div>
 
         <div className="w-full p-4 flex items-center justify-center">
+          <div><CheckBadgeIcon></CheckBadgeIcon></div>
           <div>{`recipient owns NFT: ${ownsNFT}`}</div>
           <Button
             disabled={!write || isLoading}
