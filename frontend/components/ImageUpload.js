@@ -3,7 +3,7 @@ const WEB3_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjo
 import {PhotoIcon} from '@heroicons/react/24/solid'
 import { Web3Storage } from 'web3.storage'
 import cn from 'classnames'
-import { LoaderBar,ProgressBar } from '../LoaderBar'
+import { LoaderBar,ProgressBar } from './LoaderBar'
 
 
 const client = new Web3Storage({ token: WEB3_TOKEN })
@@ -15,6 +15,8 @@ export const ImageUpload = ({onSet}) => {
 	const [version, setVersion] = useState(null);
 	const [isOnline, setIsOnline] = useState(false);
 	const [img_loading,setImageLoading] = useState(false);
+	
+
 	// const [total_size,setTotalSize] = useState(0);
 	const [loaded_size,setLoadedSize] = useState(0);
 

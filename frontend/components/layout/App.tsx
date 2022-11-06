@@ -10,7 +10,7 @@ import { useSendFlow } from '../../hooks/useSendFlow'
 import { useGetBalance, useWithdraw } from '../../hooks/useWithdrawFlow'
 import { getAddress } from 'ethers/lib/utils'
 import { useAccount } from 'wagmi'
-import { ImageUpload } from './ImageUpload'
+import { ImageUpload } from '../ImageUpload'
 
 // const GOERLI_CONTRACT_ADDRESS = '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6'
 const MOCK_TOKEN = '0xf38d32C01233eDAF3b61DAaD0eb598521688C3C6'

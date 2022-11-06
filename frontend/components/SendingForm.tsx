@@ -7,6 +7,7 @@ import { useSendFlow } from '../hooks/useSendFlow'
 import { SetNotesForm, SetRecieverForm, SetTokenForm } from './form'
 import { LoaderBar } from './LoaderBar'
 import { OverlayDialog } from './OverlayDialog'
+import {ImageUpload} from './ImageUpload'
 
 const AUDITOR_ETH_ADDRESS = '0x9A8766D4A7C9bb69E536A5cAB873CeA647bE1dD8'
 
@@ -14,6 +15,7 @@ export const Sendform = ({ props }: any): any => {
   const [token_state, setTokenState] = useState({ amount: 0 })
   const [reciever_state, setRecieverState] = useState({ address: '' })
   const [notes_state, setNotesState] = useState({ notes: '' })
+  const [image_state, setImageState] = useState({ ipfs: '' })
 
   const recipient = reciever_state.address
   const amount = token_state.amount
@@ -128,6 +130,9 @@ export const Sendform = ({ props }: any): any => {
             value={notes_state}
             onSet={setNotesState}
           ></SetNotesForm>
+        </div>
+        <div className="m-2">
+          <ImageUpload onSet={setImageState}></ImageUpload>
         </div>
 
         <div className="w-full p-4 flex items-center justify-center">
