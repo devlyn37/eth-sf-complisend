@@ -42,8 +42,8 @@ export function useSendFlow(
     }
   }, [recipient])
 
-  console.log(recipient)
-  console.log(amount)
+  // console.log(recipient)
+  // console.log(amount)
 
   const { data: erc20Id } = useContractRead({
     address: WRAPPED_TOKEN_ADDRESS,

@@ -24,6 +24,24 @@ export const XmtpProvider: React.FC<any> = ({ children }) => {
     new Map()
   )
 
+  // console.log(convoMessages)
+
+  const sendMessage = useCallback(async (message:string,recipient:any) => {
+    // console.log('send message', message, recipient)
+    if (!client) {
+      let client = await Client.create(signer)
+      setClient(client)
+      const conversation = await client.conversations.newConversation(recipient)
+      return conversation.send(message)
+      // throw new Error('Did not sign xmtp messages')
+    }else{
+      const conversation = await client.conversations.newConversation(recipient)
+      return conversation.send(message)
+    }
+  },[signer,client])
+  
+
+
   const initClient = useCallback(async () => {
     if (signer && !client) {
       try {
@@ -48,11 +66,14 @@ export const XmtpProvider: React.FC<any> = ({ children }) => {
         throw new Error('No Signer')
       }
 
-      console.log('Listing conversations')
+      // console.log('Listing conversations')
       setLoadingConversations(true)
       const convos = await client.conversations.list()
+      // console.log(convos)
       Promise.all(
         convos.map(async (convo) => {
+          let test = await convo.messages()
+          // console.log(test)
           if (convo.peerAddress !== walletAddress) {
             const messages = await convo.messages()
             convoMessages.set(convo.peerAddress, messages as any)
@@ -92,6 +113,7 @@ export const XmtpProvider: React.FC<any> = ({ children }) => {
   const [providerState, setProviderState] = useState<XmtpContextType>({
     client,
     initClient,
+    sendMessage,
     loadingConversations,
     conversations,
     convoMessages,
@@ -102,12 +124,18 @@ export const XmtpProvider: React.FC<any> = ({ children }) => {
     setProviderState({
       client,
       initClient,
+      sendMessage,
       loadingConversations,
       conversations,
       convoMessages,
       setConvoMessages,
     })
-  }, [client, initClient, loadingConversations, conversations, convoMessages])
+  }, [client, initClient, sendMessage,loadingConversations, conversations, convoMessages])
+
+
+
+
+  // console.log(conversations)
 
   return (
     <XmtpContext.Provider value={providerState}>

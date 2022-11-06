@@ -21,6 +21,8 @@ const WRAPPED_TOKEN_ABI = require('../artifacts/contracts/WrappedToken.sol/Wrapp
 const MOCK_TOKEN = '0xf38d32C01233eDAF3b61DAaD0eb598521688C3C6'
 const WRAPPED_TOKEN_ADDRESS = '0x02052ABEC1ccc18093022b6b648b9754201C7D5f'
 
+
+
 const Home: NextPage = () => {
   const { address } = useAccount()
   const [amount, setAmount] = useState(0)
@@ -37,7 +39,7 @@ const Home: NextPage = () => {
   }, [amount])
 
   const validBigNumber = bigNumberAmount !== undefined
-  console.log(`validBigNumber: ${validBigNumber}`)
+  // console.log(`validBigNumber: ${validBigNumber}`)
 
   const validRecipient = useMemo(() => {
     if (recipient.length === 0) {
@@ -80,7 +82,7 @@ const Home: NextPage = () => {
   })
 
   const { data, write, error } = useContractWrite(config as any)
-  console.log(error)
+  // console.log(error)
 
   const { isLoading } = useWaitForTransaction({
     hash: data?.hash,
