@@ -131,7 +131,7 @@ const SubmitForm = ({ props }: any): any => {
 
         <div className="w-full p-4 flex items-center justify-center">
           <Button
-            // disabled={!write || isLoading}
+            disabled={!write || isLoading}
             className="p-3 px-8 bg-blue-600 rounded-xl font-black"
             onClick={submit}
           >
@@ -154,10 +154,61 @@ const WithdrawForm = ({ props }: any): any => {
     const x = Number.parseFloat(e.target.value)
     setAmount(Number.isNaN(x) ? 0 : x)
   }
+  const toast = useToast()
 
   const balance = useGetBalance(address as any, MOCK_TOKEN)
   console.log("Here's my balance")
   console.log(balance)
+
+  const onTxnSuccess = (data: any) => {
+    console.log('success data', data)
+    toast({
+      title: 'Transaction Successful',
+      description: (
+        <>
+          <Text>Transfer Successful</Text>
+          <Text>
+            <Link
+              href={`https://goerli.etherscan.io/tx/${data?.transactionHash}`}
+              isExternal
+            >
+              View on Etherscan
+            </Link>
+          </Text>
+        </>
+      ),
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
+    })
+  }
+
+  const onError = async (err: any) => {
+    toast({
+      title: 'Transaction Failed',
+      description: (
+        <>
+          <Text>{`Something went wrong ${err}`}</Text>
+        </>
+      ),
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
+    })
+  }
+
+  const hasEnough = balance !== undefined && balance >= amount
+  const { isLoading, write, error } = useWithdraw(
+    address as any,
+    amount,
+    hasEnough,
+    onTxnSuccess,
+    onError
+  )
+
+  const submit = useCallback(async () => {
+    await write?.()
+  }, [write])
 
   return (
     <div className="bg-slate-900 p-4 rounded-md my-2">
@@ -179,9 +230,13 @@ const WithdrawForm = ({ props }: any): any => {
         sending and unwrapping to <strong>{address}</strong>
       </p>
       <div className="flex-center p-4">
-        <button className="bg-blue-500 p-4 rounded-md font-bold">
-          <span>widthdraw</span>
-        </button>
+        <Button
+          disabled={!hasEnough || !write || isLoading}
+          className="p-3 px-8 bg-blue-600 rounded-xl font-black"
+          onClick={submit}
+        >
+          Withdraw
+        </Button>
       </div>
     </div>
   )

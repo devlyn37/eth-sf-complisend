@@ -26,7 +26,15 @@ export function useGetBalance(account: string, tokenContract: string) {
   console.log("Here's the error")
   console.log(error)
 
-  return parseFloat(formatEther(balance as BigNumber))
+  let formattedBalance: number | undefined
+
+  try {
+    formattedBalance = parseFloat(formatEther(balance as BigNumber))
+  } catch (e) {
+    formattedBalance = undefined
+  }
+
+  return formattedBalance
 }
 
 export function useWithdraw(
@@ -36,7 +44,7 @@ export function useWithdraw(
   onSuccess: (data: ethers.providers.TransactionReceipt) => void,
   onError: (err: any) => void
 ) {
-  const { config } = usePrepareContractWrite({
+  const { config, error: prepareError } = usePrepareContractWrite({
     address: WRAPPED_TOKEN_ADDRESS,
     abi: WRAPPED_TOKEN_ABI.abi,
     functionName: 'releaseERC20',
@@ -53,12 +61,19 @@ export function useWithdraw(
     enabled: enabled,
     staleTime: 5000,
   })
+
+  // console.log("Here's the prepare error")
+  // console.log(prepareError)
+
   const { data, write, error } = useContractWrite(config as any)
   const { isLoading } = useWaitForTransaction({
     hash: data?.hash,
     onError,
     onSuccess,
   })
+
+  // console.log("Here's the normal error")
+  // console.log(error)
 
   return { isLoading, data, write, error }
 }
