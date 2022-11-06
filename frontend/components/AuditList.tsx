@@ -5,7 +5,7 @@ import { LoaderBar } from './LoaderBar'
 
 import { Txn } from './Txn'
 
-const MIN_REPORT_AMOUNT = 300
+const MIN_REPORT_AMOUNT = 3000
 
 export const AuditList = ({}: any): any => {
   let trx_list: any = []

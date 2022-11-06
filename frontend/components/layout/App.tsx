@@ -28,6 +28,7 @@ const SubmitForm = ({ props }: any): any => {
   const note = notes_state.notes
   const { initClient, sendMessage, client } = useContext(XmtpContext)
   const toast = useToast()
+  
 
   // const resetInputs = () => {
   //   setRecieverState({ address: '' })
@@ -113,7 +114,10 @@ const SubmitForm = ({ props }: any): any => {
 
   return (
     <>
-      <div className="flex bg-slate-900 flex-col max-w-2xl w-screen p-4 rounded-md">
+     <div className="bg-slate-800 p-4 rounded-md my-2 w-full">
+      <div className="text-slate-600 text-sm uppercase font-black">
+        send
+      </div>
         <div className="m-2">
           <SetTokenForm
             state={token_state}
@@ -167,14 +171,14 @@ const WithdrawForm = ({ props }: any): any => {
   let [withdraw_amount, setWithdrawAmount] = useState(0)
 
   return (
-    <div className="bg-slate-900 p-4 rounded-md my-2">
+    <div className="bg-slate-800 p-4 rounded-md my-2 w-full">
       <div className="text-slate-600 text-sm uppercase font-black">
         withdraw
       </div>
       <div className="flex flex-col">
         amount
         <input
-          className="bg-slate-800 p-6 text-lg"
+          className="bg-slate-700 p-6 text-lg rounded-lg "
           onChange={(e) => {
             setWithdrawAmount(e.target.value as any)
           }}
@@ -229,8 +233,8 @@ export const App = ({ customMeta }: LayoutProps): JSX.Element => {
   return (
     <Layout>
       <Head customMeta={customMeta} />
-      <header className="w-full h-full overflow-y-scroll text-white min-h-screen p-2">
-        <div className="flex flex-col items-center">
+      <header className="w-full h-full overflow-y-scroll text-white min-h-screen p-4 w-full items-center flex content-center justify-center">
+        <div className="flex flex-col items-center w-1/2">
           <WithdrawForm />
           <SubmitForm />
           <div className="p-4"></div>
