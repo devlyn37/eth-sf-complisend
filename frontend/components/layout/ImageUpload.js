@@ -15,7 +15,7 @@ export const ImageUpload = ({onSet}) => {
 	const [version, setVersion] = useState(null);
 	const [isOnline, setIsOnline] = useState(false);
 	const [img_loading,setImageLoading] = useState(false);
-	const [total_size,setTotalSize] = useState(0);
+	// const [total_size,setTotalSize] = useState(0);
 	const [loaded_size,setLoadedSize] = useState(0);
 
 	function getFiles () {
@@ -26,20 +26,24 @@ export const ImageUpload = ({onSet}) => {
 	let [ipfsHash, setIpfsHash] = useState(null);
 	let [img_url, setUrl] = useState(null);
 	
-	let uploaded_size = 0
-	async function onStoredChunk(size){
-		console.log("onStoredChunk",size)
-		uploaded_size += size
-		setLoadedSize(uploaded_size/total_size)
-	}
+	
+	
 
 	async function captureFile(event){
 		event.preventDefault()
 		const file = event.target.files[0]
 		const reader = new window.FileReader()
 		console.log('file', file)
-		setTotalSize(file.size)
+		// setTotalSize(file.size)
 		setImageLoading(true)
+		let total_size = file.size
+		let uploaded_size = 0
+		async function onStoredChunk(size){
+			console.log("onStoredChunk",size)
+			uploaded_size += size
+			setLoadedSize(Math.floor(uploaded_size/total_size*100)||0)
+		}
+
 		const cid = await client.put([file], { maxRetries: 1, onStoredChunk })
 		let url = `https://ipfs.io/ipfs/${cid}/`+file.name
 		onSet(cid)
@@ -73,8 +77,8 @@ export const ImageUpload = ({onSet}) => {
 			onBlur={setFocus.bind(null, false)}
 			placeholder="upload image"
 		></input>
-		
-		<ProgressBar progress={(loaded_size)||0} loading={true} ></ProgressBar>
+		{Math.floor((loaded_size||0))+'%'}
+		<ProgressBar progress={(loaded_size/100)||0} loading={true} ></ProgressBar>
 		{img_url && <div className='text-bold text-blue-500'>{img_url}</div>}
 		</div>
 		
