@@ -39,6 +39,7 @@ export const Sendform = ({ props }: any): any => {
   }
 
   const ownsNFT = useCheckOwnership(formattedRecipientAddress)
+  
   console.log(ownsNFT)
 
   const onTxnSuccess = (data: any) => {
@@ -124,8 +125,8 @@ export const Sendform = ({ props }: any): any => {
 
   return (
     <>
-      <div className="bg-slate-800 p-4 rounded-md my-2 w-full">
-        <div className="text-green-400 text-lg uppercase font-black">send</div>
+      <div className="bg-green-500 text-black p-4 rounded-md my-2 w-full">
+        <div className="text-green-800 text-lg uppercase font-black">send</div>
         <div className="m-2">
           <SetTokenForm
             state={token_state}
@@ -134,13 +135,14 @@ export const Sendform = ({ props }: any): any => {
         </div>
         <div className="m-2">
           <SetRecieverForm
-            value={reciever_state}
+            ownsNFT={ownsNFT}
+            state={reciever_state}
             onSet={setRecieverState}
           ></SetRecieverForm>
         </div>
         <div className="m-2">
           <SetNotesForm
-            value={notes_state}
+            state={notes_state}
             onSet={setNotesState}
           ></SetNotesForm>
         </div>

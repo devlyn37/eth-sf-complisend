@@ -27,9 +27,9 @@ export const Txn = ({ from,to,txn }: any): any => {
       
       <a target='_blank' href={`https://goerli.etherscan.io/tx/${txn.hash}`}><div className='p-2 hover:outline outline-4 outline-black font-bold p-2 px-4 bg-yellow-500 rounded-md w-fit mt-4'><span className='text-yellow-700'>tnx #</span><span className='text-black'>{getFirstAndLast5LettersFromString(txn.hash)}</span></div></a>
       <div className='flex flex-row'>
-        <a target='_blank' href={`https://goerli.etherscan.io/address/${txn.recipient}`}><div className='p-2 hover:outline outline-4 outline-black font-bold p-2 px-4 bg-red-500 rounded-md w-fit mt-4'><span className='text-red-700'>from @</span><span className='text-black'>{getFirstAndLast5LettersFromString(from)}</span></div></a>
+        <a target='_blank' href={`https://goerli.etherscan.io/address/${from}`}><div className='p-2 hover:outline outline-4 outline-black font-bold p-2 px-4 bg-red-500 rounded-md w-fit mt-4'><span className='text-red-700'>from @</span><span className='text-black'>{getFirstAndLast5LettersFromString(from)}</span></div></a>
         <ChevronDoubleRightIcon className='text-slate-400 font-bold w-6 mt-3 mx-2'></ChevronDoubleRightIcon>
-        <a target='_blank' href={`https://goerli.etherscan.io/address/${txn.recipient}`}><div className='p-2 hover:outline outline-4 outline-black font-bold p-2 px-4 bg-green-500 rounded-md w-fit mt-4'><span className='text-green-700'>to @</span><span className='text-black'>{getFirstAndLast5LettersFromString(to)}</span></div></a>
+        <a target='_blank' href={`https://goerli.etherscan.io/address/${to}`}><div className='p-2 hover:outline outline-4 outline-black font-bold p-2 px-4 bg-green-500 rounded-md w-fit mt-4'><span className='text-green-700'>to @</span><span className='text-black'>{getFirstAndLast5LettersFromString(to)}</span></div></a>
       </div>
       
       

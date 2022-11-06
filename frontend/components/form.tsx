@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { OverlayDialog } from './OverlayDialog'
-import { WalletIcon,CurrencyDollarIcon,PencilSquareIcon} from '@heroicons/react/24/solid'
+import { WalletIcon,CurrencyDollarIcon,PencilSquareIcon, AtSymbolIcon} from '@heroicons/react/24/solid'
 import cn from 'classnames'
+import {ShieldExclamationIcon,CheckCircleIcon} from '@heroicons/react/24/solid'
 
 export const SetTokenForm = ({ state, onSet }: any): any => {
   const [open_form, setFormOpen] = useState(false)
@@ -25,14 +26,14 @@ export const SetTokenForm = ({ state, onSet }: any): any => {
     <>
       <div
         className={cn({
-          'flex flex-row bg-slate-700 p-4 text-lg w-full rounded-lg outline-4 outline-blue-500':
+          'flex flex-row bg-green-400 text-black p-4 text-lg w-full rounded-lg outline-4 outline-green-800':
             true,
           outline: is_focus,
         })}
       >
-        <CurrencyDollarIcon className={cn({ 'w-10 text-white': true })}></CurrencyDollarIcon>
+        <CurrencyDollarIcon className={cn({ 'w-10 text-green-700': true })}></CurrencyDollarIcon>
         <input
-          className="bg-transparent p-4 text-xl font-bold text-cyan-500 w-full rounded-lg outline-none"
+          className="bg-transparent p-4 text-xl font-bold text-black w-full rounded-lg outline-none"
           onChange={onSetAmountChange}
           autoComplete="on"
           name="wallet_address"
@@ -73,14 +74,14 @@ export const SetNotesForm = ({ state = {}, onSet }: any): any => {
     <>
      <div
         className={cn({
-          'flex flex-row bg-slate-700 p-4 text-lg w-full rounded-lg outline-4 outline-blue-500':
+          'flex flex-row bg-green-400 text-black p-4 text-lg w-full rounded-lg outline-4 outline-green-800':
             true,
           outline: is_focus,
         })}
       >
-        <PencilSquareIcon className={cn({ 'w-10 text-white': true })}></PencilSquareIcon>
+        <PencilSquareIcon className={cn({ 'w-10 text-green-700': true })}></PencilSquareIcon>
         <input
-          className="bg-transparent p-4 text-xl font-bold text-cyan-500 w-full rounded-lg outline-none"
+          className="bg-transparent p-4 text-xl font-bold text-black w-full rounded-lg outline-none placeholder-green-700"
           onChange={onSetNotesChange}
           autoComplete="on"
           name="wallet_address"
@@ -109,14 +110,16 @@ let onAddrChange = function(e:any){
 } */
 }
 
-export const SetRecieverForm = ({ state = {}, onSet }: any): any => {
+export const SetRecieverForm = ({ state = {}, onSet,ownsNFT }: any): any => {
   const [open_form, setFormOpen] = useState(false)
-
+  const [addr, setAddr] = useState('')
   const onSetAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onSet({
       address: event.target.value,
     })
+    setAddr(event.target.value)
   }
+  // console.log(state.address)
 
   const onSubmit = (e: any) => {
     e.preventDefault()
@@ -127,17 +130,24 @@ export const SetRecieverForm = ({ state = {}, onSet }: any): any => {
 
   let [is_focus, setFocus] = useState(false)
 
+  let nft_owner_indicator = <div>
+    {ownsNFT == false && <div className='rounded-md bg-red-500 text-white self-center w-fit mr-3 p-1 px-3 flex flex-row items-center'><ShieldExclamationIcon className='w-12 p-2'/><strong className='pr-4'>unverified</strong></div>}
+    {ownsNFT == true && <div className='rounded-md bg-green-500 text-black self-center w-fit mr-3 p-1 px-3 flex flex-row items-center content-center'><CheckCircleIcon className='w-12 p-2'/><strong className='pr-4'>verified</strong></div>}
+  </div>
+
   return (
     <div
       className={cn({
-        'flex flex-row bg-slate-700 p-4 text-lg w-full rounded-lg outline-4 outline-blue-500':
-          true,
+        'flex flex-row bg-green-400 p-4 text-lg w-full rounded-lg outline-4 outline-green-800':true,
+        
+        // 'bg-white text-black': ownsNFT == true,
+        // 'bg-red-500 text-white': ownsNFT == false,
         outline: is_focus,
       })}
     >
-      <WalletIcon className={cn({ 'w-10 text-white': true })}></WalletIcon>
+      <AtSymbolIcon className={cn({ 'w-10 text-green-700 shrink-0': true })}></AtSymbolIcon>
       <input
-        className="bg-transparent p-4 text-xl font-bold text-cyan-500 w-full rounded-lg outline-none"
+        className="bg-transparent p-4 text-xl font-bold w-full rounded-lg outline-none placeholder-green-700"
         onChange={onSetAddressChange}
         autoComplete="on"
         name="wallet_address"
@@ -146,6 +156,7 @@ export const SetRecieverForm = ({ state = {}, onSet }: any): any => {
         placeholder="wallet address"
         value={state.address}
       ></input>
+      {state.address && nft_owner_indicator}
     </div>
   )
 }
