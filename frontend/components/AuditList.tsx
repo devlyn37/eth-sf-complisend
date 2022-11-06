@@ -46,12 +46,12 @@ export const AuditList = ({}: any): any => {
 
       <div>min report amount: {MIN_REPORT_AMOUNT}</div>
       
-      <div className="bg-green-500 text-black p-4 rounded-md my-2 w-full">
+      <div className=" text-black p-4 flex flex-row w-64">
         
-        <div className="m-2">
+        <div className="m-2 bg-green-500 rounded-md my-2 w-full p-2 cursor-pointer">
           encrypted
         </div>
-        <div className="m-2">
+        <div className="m-2 bg-red-500 rounded-md my-2 w-full p-2 cursor-pointer">
           decrypted
         </div>
       </div>
