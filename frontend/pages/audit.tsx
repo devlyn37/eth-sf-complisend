@@ -24,18 +24,21 @@ const Audit: NextPage = () => {
 
   return (
     <Layout>
-      {(xmtp_connected && (
-        <div className="p-4">
-          <AuditList />
-        </div>
-      )) || (
-        <button
-          onClick={initClient}
-          className="rounded-xl bg-blue-500 px-4 p-2 font-black"
-        >
-          load transaction history
-        </button>
-      )}
+      <div className='flex-col flex p-4'>
+        {(xmtp_connected && (
+          <div className="p-4">
+            <AuditList />
+          </div>
+        )) || (
+          <button
+            onClick={initClient}
+            className="rounded-xl bg-blue-500 px-4 p-2 font-black m-4"
+          >
+            load transaction history
+          </button>
+        )}
+      </div>
+      
     </Layout>
   )
 }

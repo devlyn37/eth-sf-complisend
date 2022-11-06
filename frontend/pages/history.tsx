@@ -27,7 +27,7 @@ const History: NextPage = () => {
       )) || (
         <button
           onClick={initClient}
-          className="rounded-xl bg-blue-500 px-4 p-2 font-black"
+          className="rounded-xl bg-blue-500 px-4 p-2 font-black m-4"
         >
           load transaction history
         </button>

@@ -74,7 +74,11 @@ export const TxnList = ({ props }: any): any => {
       </div>
       <LoaderBar loading={loadingConversations}></LoaderBar>
       <div className="py-8"></div>
-      {trx_list}
+      <div className='w-full flex flex-col align-center items-center justify-center'>
+        <div className='w-full flex flex-col align-center items-center justify-center w-1/2'>
+          {trx_list}
+        </div>
+      </div>
     </div>
   )
 }
