@@ -164,6 +164,9 @@ const WithdrawForm = ({ props }: any): any => {
       <div className="text-slate-600 text-sm uppercase font-black">
         withdraw
       </div>
+      <div className="text-white text-sm uppercase font-black">
+        Current Balance {balance}
+      </div>
       <div className="flex flex-col">
         amount
         <input
