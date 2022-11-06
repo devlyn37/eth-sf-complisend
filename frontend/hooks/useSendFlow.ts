@@ -37,6 +37,7 @@ function useApprove(
     functionName: 'approve',
     args: [WRAPPED_TOKEN_ADDRESS, parseEther(amount.toString())],
     enabled: enabled,
+    staleTime: 5000,
   })
   const { data, write, error } = useContractWrite(config)
   const { isLoading } = useWaitForTransaction({
@@ -73,6 +74,7 @@ function useLock(
       ethers.utils.toUtf8Bytes('transfer'),
     ],
     enabled: enabled,
+    staleTime: 5000,
   })
   const { data, write, error } = useContractWrite(config as any)
   const { isLoading } = useWaitForTransaction({
@@ -119,7 +121,8 @@ export function useSendFlow(
     address: MOCK_TOKEN,
     abi: erc20ABI,
     functionName: 'allowance',
-    args: [address as any, WRAPPED_TOKEN_ADDRESS],
+    args: [address as any, '0x02052abec1ccc18093022b6b648b9754201c7d5f'],
+    watch: true,
   })
 
   console.log(`allowance ${allowance && parseFloat(formatEther(allowance))}`)

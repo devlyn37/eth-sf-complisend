@@ -66,7 +66,6 @@ const SubmitForm = ({ props }: any): any => {
     })
 
     await sendXMPTMessage(`hash: ${data.transactionHash}, note: ${note}`)
-    resetInputs()
   }
 
   const onError = async (err: any) => {
