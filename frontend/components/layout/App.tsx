@@ -178,7 +178,7 @@ const WithdrawForm = ({ props }: any): any => {
       <div className="flex flex-col">
         amount
         <input
-          className="bg-slate-700 p-6 text-lg rounded-lg "
+          className="bg-slate-700 p-6 text-lg rounded-lg"
           onChange={(e) => {
             setWithdrawAmount(e.target.value as any)
           }}

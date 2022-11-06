@@ -1,4 +1,4 @@
-export const AuditList = ({}: any): any => {
+export const ImageUpload = ({}: any): any => {
 	function captureFile (event){
 		event.preventDefault()
 		const file = event.target.files[0]
@@ -22,5 +22,4 @@ export const AuditList = ({}: any): any => {
 			</form>
 		</div>
 	</div>
-	
 }

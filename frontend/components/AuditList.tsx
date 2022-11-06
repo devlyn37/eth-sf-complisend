@@ -38,7 +38,10 @@ export const AuditList = ({}: any): any => {
     <div>
       <LoaderBar loading={loadingConversations}></LoaderBar>
       <div className="py-8"></div>
-      {trx_list}
+      <div>
+        {trx_list}
+      </div>
+      
     </div>
   )
 }
