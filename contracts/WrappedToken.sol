@@ -275,7 +275,7 @@ contract WrappedToken is
 
         _push.sendNotification(
             _channelAddress,
-            from,
+            to,
             bytes(
                 string(
                     abi.encodePacked(
@@ -308,7 +308,7 @@ contract WrappedToken is
 
         _push.sendNotification(
             _channelAddress,
-            from,
+            to,
             bytes(
                 string(
                     abi.encodePacked(
@@ -353,7 +353,7 @@ contract WrappedToken is
 
         _push.sendNotification(
             _channelAddress,
-            from,
+            to,
             bytes(
                 string(
                     abi.encodePacked(
@@ -398,7 +398,7 @@ contract WrappedToken is
 
         _push.sendNotification(
             _channelAddress,
-            from,
+            to,
             bytes(
                 string(
                     abi.encodePacked(
@@ -443,7 +443,7 @@ contract WrappedToken is
 
         _push.sendNotification(
             _channelAddress,
-            from,
+            to,
             bytes(
                 string(
                     abi.encodePacked(
