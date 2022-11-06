@@ -9,11 +9,7 @@ import { useAccount, useSigner } from 'wagmi'
 export const XmtpProvider: React.FC<any> = ({ children }) => {
   const [client, setClient] = useState<Client | null>()
   const { address: walletAddress, isConnecting, isDisconnected } = useAccount()
-  const {
-    data: signer,
-    isError: isErrorSigner,
-    isLoading: isLoadingSigner,
-  } = useSigner()
+  const { data: signer } = useSigner()
 
   const [convoMessages, setConvoMessages] = useState<Map<string, Message[]>>(
     new Map()
@@ -26,21 +22,29 @@ export const XmtpProvider: React.FC<any> = ({ children }) => {
 
   // console.log(convoMessages)
 
-  const sendMessage = useCallback(async (message:string,recipient:any) => {
-    // console.log('send message', message, recipient)
-    if (!client) {
-      let client = await Client.create(signer)
-      setClient(client)
-      const conversation = await client.conversations.newConversation(recipient)
-      return conversation.send(message)
-      // throw new Error('Did not sign xmtp messages')
-    }else{
-      const conversation = await client.conversations.newConversation(recipient)
-      return conversation.send(message)
-    }
-  },[signer,client])
-  
-
+  const sendMessage = useCallback(
+    async (message: string, recipient: any) => {
+      // console.log('send message', message, recipient)
+      if (!client) {
+        if (!signer) {
+          throw new Error('Ah no signer')
+        }
+        let client = await Client.create(signer)
+        setClient(client)
+        const conversation = await client.conversations.newConversation(
+          recipient
+        )
+        return conversation.send(message)
+        // throw new Error('Did not sign xmtp messages')
+      } else {
+        const conversation = await client.conversations.newConversation(
+          recipient
+        )
+        return conversation.send(message)
+      }
+    },
+    [signer, client]
+  )
 
   const initClient = useCallback(async () => {
     if (signer && !client) {
@@ -130,10 +134,14 @@ export const XmtpProvider: React.FC<any> = ({ children }) => {
       convoMessages,
       setConvoMessages,
     })
-  }, [client, initClient, sendMessage,loadingConversations, conversations, convoMessages])
-
-
-
+  }, [
+    client,
+    initClient,
+    sendMessage,
+    loadingConversations,
+    conversations,
+    convoMessages,
+  ])
 
   // console.log(conversations)
 
