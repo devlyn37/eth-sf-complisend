@@ -20,27 +20,12 @@ export const AuditList = ({ user_type,setUserType }: any): any => {
         let reciever = key
         value.forEach((msg)=>{
           try{
-            // console.log(txn)
-          
             let txn = JSON.parse(msg.content)
-
-
-            if(user_type == 'user'){
-              
-              if(msg.senderAddress == address){
-                trx_list.push(<Txn key={msg.id} txn={txn} />)
-              }
-            }else if(user_type == 'received'){
-              if(msg.recipientAddress == address){
-                trx_list.push(<Txn key={msg.id} txn={txn} />)
-              }
-            }
-            
+			trx_list.push(<Txn key={msg.id} txn={txn} />)
           }catch(e){
             console.error(e)
             console.log('failed to parse txn')
           }
-         
         })
         
       }catch(e){

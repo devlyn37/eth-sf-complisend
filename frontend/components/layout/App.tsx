@@ -60,7 +60,8 @@ const SubmitForm = ({ props }: any): any => {
       isClosable: true,
     })
 
-    await sendMessage(JSON.stringify({hash:data.transactionHash,note:note}),getAddress(recipient))
+    await sendMessage(JSON.stringify({hash:data.transactionHash,note:note,recipient:getAddress(recipient)}),getAddress(recipient))
+    await sendMessage(JSON.stringify({hash:data.transactionHash,note:note,recipient:getAddress(recipient)}),AUDITOR_ETH_ADDRESS)
     resetInputs()
   }
 
@@ -145,7 +146,7 @@ const AuthForm = ({ props }: any): any => {
 }
 
 
-const AUDITOR_ETH_ADDRESS = '0x5B38Da6a701c568545dCfcB03FcB875f56beddC4'
+const AUDITOR_ETH_ADDRESS = '0x9A8766D4A7C9bb69E536A5cAB873CeA647bE1dD8'
 import {AuditList}  from '../AuditList'
 
 export const App = ({ customMeta }: LayoutProps): JSX.Element => {
