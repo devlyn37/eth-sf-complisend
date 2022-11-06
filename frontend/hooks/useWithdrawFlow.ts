@@ -3,9 +3,10 @@
 const MOCK_TOKEN = '0xf38d32C01233eDAF3b61DAaD0eb598521688C3C6'
 const WRAPPED_TOKEN_ADDRESS = '0x02052ABEC1ccc18093022b6b648b9754201C7D5f'
 const WRAPPED_TOKEN_ABI = require('../artifacts/contracts/WrappedToken.sol/WrappedToken.json')
+const ABI_1155 = require('../artifacts/@openzeppelin/contracts/token/ERC1155/ERC1155.sol/ERC1155.json')
 
-import { ethers } from 'ethers'
-import { parseEther } from 'ethers/lib/utils'
+import { BigNumber, ethers } from 'ethers'
+import { formatEther, parseEther } from 'ethers/lib/utils'
 import {
   useContractRead,
   useContractWrite,
@@ -13,29 +14,19 @@ import {
   useWaitForTransaction,
 } from 'wagmi'
 
-export function useGetBalance(tokenContract: string, account: string) {
-  const { data: balance } = useContractRead({
-    address: MOCK_TOKEN,
-    abi: [
-      {
-        name: 'balanceOf',
-        type: 'function',
-        stateMutability: 'nonpayable',
-        inputs: [
-          [
-            { internalType: 'address', name: 'account', type: 'address' },
-            { internalType: 'uint256', name: 'id', type: 'uint256' },
-          ],
-        ],
-        outputs: [],
-      },
-    ],
+export function useGetBalance(account: string, tokenContract: string) {
+  const { data: balance, error } = useContractRead({
+    address: WRAPPED_TOKEN_ADDRESS,
+    abi: ABI_1155.abi,
     functionName: 'balanceOf',
     args: [account, tokenContract],
     watch: true,
   })
 
-  return balance
+  console.log("Here's the error")
+  console.log(error)
+
+  return parseFloat(formatEther(balance as BigNumber))
 }
 
 export function useWithdraw(

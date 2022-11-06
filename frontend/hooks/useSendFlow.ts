@@ -116,9 +116,6 @@ export function useSendFlow(
     }
   }, [recipient])
 
-  console.log(address)
-  console.log(MOCK_TOKEN)
-
   const { data: allowance } = useContractRead({
     address: MOCK_TOKEN,
     abi: erc20ABI,
@@ -127,21 +124,21 @@ export function useSendFlow(
     watch: true,
   })
 
-  console.log(`allowance ${allowance && parseFloat(formatEther(allowance))}`)
-  console.log(`bigNumberAmount ${bigNumberAmount}`)
-  console.log(`amount ${bigNumberAmount?.toNumber()}`)
-  console.log(`recipient ${recipient}`)
-  console.log(`validRecipient ${validRecipient}`)
+  // console.log(`allowance ${allowance && parseFloat(formatEther(allowance))}`)
+  // console.log(`bigNumberAmount ${bigNumberAmount}`)
+  // console.log(`amount ${bigNumberAmount?.toNumber()}`)
+  // console.log(`recipient ${recipient}`)
+  // console.log(`validRecipient ${validRecipient}`)
 
   const validInput =
     bigNumberAmount !== undefined && recipient.length > 0 && validRecipient
-  console.log(`validInput ${validInput}`)
+  // console.log(`validInput ${validInput}`)
 
   const allowedToSpend =
     allowance !== undefined && parseFloat(formatEther(allowance)) >= amount
-  console.log(`allowed to spend ${allowedToSpend}`)
+  // console.log(`allowed to spend ${allowedToSpend}`)
   const canLock = validInput && allowedToSpend
-  console.log(`can lock ${canLock}`)
+  // console.log(`can lock ${canLock}`)
 
   const {
     isLoading: isLoadingAllow,
@@ -164,15 +161,15 @@ export function useSendFlow(
     onLockError
   )
 
-  console.log('Allow Contract Write Details')
-  console.log(writeAllow)
-  console.log(dataAllow)
-  console.log(errorAllow)
+  // console.log('Allow Contract Write Details')
+  // console.log(writeAllow)
+  // console.log(dataAllow)
+  // console.log(errorAllow)
 
-  console.log('Lock Contract Write Details')
-  console.log(writeLock)
-  console.log(dataLock)
-  console.log(errorLock)
+  // console.log('Lock Contract Write Details')
+  // console.log(writeLock)
+  // console.log(dataLock)
+  // console.log(errorLock)
 
   let state: SendFlowState
   let write: any
@@ -200,9 +197,6 @@ export function useSendFlow(
     state = SendFlowState.LockComplete
     write = undefined
   }
-
-  console.log('\n\nWrite\n\n')
-  console.log(write)
 
   return {
     isLoading: isLoadingAllow || isLoadingLock,

@@ -7,8 +7,13 @@ import { SetNotesForm, SetRecieverForm, SetTokenForm } from '../form'
 import { OverlayDialog } from '../OverlayDialog'
 import { LoaderBar } from '../LoaderBar'
 import { useSendFlow } from '../../hooks/useSendFlow'
+import { useGetBalance, useWithdraw } from '../../hooks/useWithdrawFlow'
 import { getAddress } from 'ethers/lib/utils'
 import { useAccount } from 'wagmi'
+
+// const GOERLI_CONTRACT_ADDRESS = '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6'
+const MOCK_TOKEN = '0xf38d32C01233eDAF3b61DAaD0eb598521688C3C6'
+const WRAPPED_TOKEN_ADDRESS = '0x02052ABEC1ccc18093022b6b648b9754201C7D5f'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -145,6 +150,14 @@ const SubmitForm = ({ props }: any): any => {
 const WithdrawForm = ({ props }: any): any => {
   const [amount, setAmount] = useState(0)
   const { address } = useAccount()
+  const handleChange = (e: any) => {
+    const x = Number.parseFloat(e.target.value)
+    setAmount(Number.isNaN(x) ? 0 : x)
+  }
+
+  const balance = useGetBalance(address as any, MOCK_TOKEN)
+  console.log("Here's my balance")
+  console.log(balance)
 
   return (
     <div className="bg-slate-900 p-4 rounded-md my-2">
@@ -155,10 +168,7 @@ const WithdrawForm = ({ props }: any): any => {
         amount
         <input
           className="bg-slate-800 p-6 text-lg"
-          onChange={(e) => {
-            const x = Number.parseFloat(e.target.value)
-            setAmount(Number.isNaN(x) ? 0 : x)
-          }}
+          onChange={handleChange}
           value={amount}
         ></input>
       </div>
