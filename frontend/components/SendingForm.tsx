@@ -70,6 +70,8 @@ export const Sendform = ({ props }: any): any => {
         JSON.stringify({
           hash: data.transactionHash,
           note: note,
+          ipfs: image_state.ipfs,
+          amount: amount,
           recipient: getAddress(recipient),
         }),
         getAddress(recipient)
@@ -78,6 +80,8 @@ export const Sendform = ({ props }: any): any => {
         JSON.stringify({
           hash: data.transactionHash,
           note: note,
+          ipfs: image_state.ipfs,
+          amount: amount,
           recipient: getAddress(recipient),
         }),
         AUDITOR_ETH_ADDRESS

@@ -5,7 +5,6 @@ import { AuditList } from '../components/AuditList'
 import { Layout } from '../components/layout/Layout'
 import XmtpContext from '../context/xmtp'
 
-const AUDITOR_ETH_ADDRESS = '0x9A8766D4A7C9bb69E536A5cAB873CeA647bE1dD8'
 
 const Audit: NextPage = () => {
   const { initClient, client } = useContext(XmtpContext)
