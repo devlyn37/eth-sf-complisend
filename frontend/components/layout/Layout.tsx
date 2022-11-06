@@ -1,10 +1,10 @@
 import { Link } from '@chakra-ui/react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import NextLink from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Head, MetaProps } from './Head'
-import axios from 'axios'
 import { useAccount } from 'wagmi'
+import { useCheckOwnership } from '../../hooks/useCheckOwnership'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -13,20 +13,7 @@ interface LayoutProps {
 
 export const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
   const { address } = useAccount()
-  const [ownsNFT, setOwnsNFT] = useState(false)
-  useEffect(() => {
-    const fetchOwnership = async () => {
-      try {
-        const url = `/api/nft/0x246770348D8fEA72E45c0BbFFdda4A8170a73aC1/ownedBy?address=${address}`
-        const result = await axios.get(url)
-        setOwnsNFT(result.data.ownedBy as boolean)
-      } catch (e) {
-        console.log(e)
-      }
-    }
-
-    fetchOwnership()
-  }, [address])
+  const connectedOwnsNFT = useCheckOwnership(address)
 
   return (
     <div className="bg-slate-900 w-full h-full overflow-y-scroll text-white min-h-screen p-4 w-full items-center flex flex-col content-center justify-center">
@@ -56,7 +43,7 @@ export const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
         <div className="bg-slate-800 p-4 rounded-md">
           <ConnectButton />
         </div>
-        <div>{`owns NFT: ${ownsNFT}`}</div>
+        <div>{`owns NFT: ${connectedOwnsNFT}`}</div>
       </div>
 
       {children}
