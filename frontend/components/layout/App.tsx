@@ -64,6 +64,7 @@ const SubmitForm = ({ props }: any): any => {
         JSON.stringify({
           hash: data.transactionHash,
           note: note,
+          amount: amount,
           image: image_state.ipfs,
           recipient: getAddress(recipient),
         }),
@@ -73,6 +74,7 @@ const SubmitForm = ({ props }: any): any => {
         JSON.stringify({
           hash: data.transactionHash,
           note: note,
+          amount: amount,
           image: image_state.ipfs,
           recipient: getAddress(recipient),
         }),

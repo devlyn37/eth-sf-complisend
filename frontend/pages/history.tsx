@@ -9,6 +9,7 @@ const History: NextPage = () => {
   let [xmtp_connected, setXMTPConnected] = useState(false)
 
   useEffect(() => {
+    console.log('init client')
     initClient()
   }, [])
 

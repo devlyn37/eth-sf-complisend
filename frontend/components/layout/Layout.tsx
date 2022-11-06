@@ -16,7 +16,7 @@ export const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
   const connectedOwnsNFT = useCheckOwnership(address)
 
   return (
-    <div className="bg-slate-900 w-full h-full overflow-y-scroll text-white min-h-screen p-4 w-full items-center flex flex-col content-center justify-center">
+    <div className="bg-slate-900 w-full h-full overflow-y-scroll text-white min-h-screen p-4 w-full items-center flex flex-col content-center justify-center min-h-screen">
       <Head customMeta={customMeta} />
       <h1 className="text-center p-6 text-4xl font-bold gradient-text">
         COMPLISEND

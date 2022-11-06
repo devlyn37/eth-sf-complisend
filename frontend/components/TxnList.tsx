@@ -9,28 +9,35 @@ export const TxnList = ({ props }: any): any => {
   const [filter, setFilter] = useState('sent')
 
   let trx_list: any = []
+  let keys_used:any = {}
   const { address } = useAccount()
 
-  const { convoMessages, loadingConversations, initClient, client } =
+  const { convoMessages, conversations,loadingConversations, initClient, client } =
     useContext(XmtpContext)
-  // console.log('MESSAGES',convoMessages)
   if (convoMessages) {
+    // console.log(conversations)
     for (let [key, value] of convoMessages) {
+      // console.log
       try {
         let reciever = key
         value.forEach((msg) => {
-          try {
-            // console.log(txn)
 
+          try {
             let txn = JSON.parse((msg as any).content)
 
             if (filter == 'sent') {
               if (msg.senderAddress == address) {
-                trx_list.push(<Txn key={msg.id} txn={txn} />)
+                if(!keys_used[txn.hash]){
+                  trx_list.push(<Txn from={msg.senderAddress} key={txn.hash} txn={txn} />)
+                  keys_used[txn.hash] = true
+                }
               }
             } else if (filter == 'received') {
               if ((msg as any).recipientAddress == address) {
-                trx_list.push(<Txn key={msg.id} txn={txn} />)
+                if(!keys_used[txn.hash]){
+                  trx_list.push(<Txn from={msg.senderAddress} key={txn.hash} txn={txn} />)
+                  keys_used[txn.hash] = true
+                }
               }
             }
           } catch (e) {

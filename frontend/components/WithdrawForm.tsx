@@ -90,7 +90,7 @@ export const WithdrawForm = ({ props }: any): any => {
       <div className="flex-center p-4">
         <Button
           disabled={!hasEnough || !write || isLoading}
-          className="p-3 px-8 bg-blue-600 rounded-xl font-black"
+          className="p-3 px-8 rounded-xl text-black bg-blue-500"
           onClick={submit}
         >
           {isLoading ? <Spinner /> : 'Withdraw'}
