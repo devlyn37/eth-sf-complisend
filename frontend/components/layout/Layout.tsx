@@ -23,11 +23,16 @@ export const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
   //@ts-ignore
   const is_auditor = (String(address) == AUDITOR_ETH_ADDRESS)
 
-  const verifiedBadge = (label:string,verified:boolean) => {
+  let [toggle_a,toggleA] = React.useState(connectedOwnsNFT)
+  let [toggle_b,toggleB] = React.useState(connectedOwnsNFT)
+  let [toggle_c,toggleC] = React.useState(connectedOwnsNFT)
+
+
+  const verifiedBadge = (label:string,verified:boolean,toggleVerified:any) => {
     if (!verified){
-      return <div className='rounded-md bg-red-500 text-white self-center w-fit mr-3 p-1 px-3 flex flex-row items-center'><ShieldExclamationIcon className='w-12 p-2'/><strong className='pr-4'>{label}</strong></div>
+      return <div onClick={toggleVerified.bind(null,!verified)} className='rounded-md bg-red-500 text-white self-center w-fit mr-3 p-1 px-3 flex flex-row items-center'><ShieldExclamationIcon className='w-12 p-2'/><strong className='pr-4'>{label}</strong></div>
     }else{
-      return <div className='rounded-md bg-green-500 text-black self-center w-fit mr-3 p-1 px-3 flex flex-row items-center content-center'><CheckCircleIcon className='w-12 p-2'/><strong className='pr-4'>{label}</strong></div>
+      return <div onClick={toggleVerified.bind(null,!verified)} className='rounded-md bg-green-500 text-black self-center w-fit mr-3 p-1 px-3 flex flex-row items-center content-center'><CheckCircleIcon className='w-12 p-2'/><strong className='pr-4'>{label}</strong></div>
     }
   }
 
@@ -65,9 +70,9 @@ export const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
             verified status
           </div>
           <div className='w-full flex flex-row w-full items-center justify-center'>
-            {verifiedBadge('kyc',connectedOwnsNFT)}
-            {verifiedBadge('wallet',connectedOwnsNFT)}
-            {verifiedBadge('token',connectedOwnsNFT)}
+            {verifiedBadge('kyc',toggle_a,toggleA)}
+            {verifiedBadge('wallet',toggle_b,toggleB)}
+            {verifiedBadge('token',toggle_c,toggleC)}
           </div>      
         </div>  
         {children}
