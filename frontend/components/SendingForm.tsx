@@ -1,17 +1,22 @@
-import { Button, Link, Text, useToast } from '@chakra-ui/react'
+import { Button, Link, Spinner, Text, useToast } from '@chakra-ui/react'
 import { getAddress } from 'ethers/lib/utils'
 import { useCallback, useContext, useState } from 'react'
 import XmtpContext from '../context/xmtp'
 import { useCheckOwnership } from '../hooks/useCheckOwnership'
-import { useSendFlow } from '../hooks/useSendFlow'
+import { SendFlowState, useSendFlow } from '../hooks/useSendFlow'
 import { SetNotesForm, SetRecieverForm, SetTokenForm } from './form'
-import { LoaderBar } from './LoaderBar'
-import { OverlayDialog } from './OverlayDialog'
-import {ImageUpload} from './ImageUpload'
-import { Identity } from "@semaphore-protocol/identity"
-
+import { ImageUpload } from './ImageUpload'
+import { Identity } from '@semaphore-protocol/identity'
 
 const AUDITOR_ETH_ADDRESS = '0x9A8766D4A7C9bb69E536A5cAB873CeA647bE1dD8'
+const ButtonTextMap = new Map([
+  [SendFlowState.needsInput, 'Fill out details First'],
+  [SendFlowState.needAllowance, 'Allow Contract To Trade Tokens'],
+  [SendFlowState.loadingAllowance, 'Waiting for allowance transaction'],
+  [SendFlowState.allowanceGood, 'Send ERC20 Token'],
+  [SendFlowState.loadingLock, 'Waiting for transfer transaction'],
+  [SendFlowState.LockComplete, 'Transfer Complete'],
+])
 
 export const Sendform = ({ props }: any): any => {
   const [token_state, setTokenState] = useState({ amount: 0 })
@@ -144,14 +149,11 @@ export const Sendform = ({ props }: any): any => {
             className="p-3 px-8 bg-blue-600 rounded-xl font-black"
             onClick={submit}
           >
-            {state}
+            {ButtonTextMap.get(state)}
+            {isLoading ? <Spinner marginLeft={5} /> : null}{' '}
           </Button>
         </div>
       </div>
-      <OverlayDialog show={isLoading}>
-        <LoaderBar> </LoaderBar>
-        <div className="p-2">sending....</div>
-      </OverlayDialog>
     </>
   )
 }
