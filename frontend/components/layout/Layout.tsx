@@ -21,10 +21,23 @@ export const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
             justifyContent="space-between"
             py="8"
           >
+            <h1 className="text-center p-6 text-4xl font-bold gradient-text">
+              COMPLISEND
+            </h1>
             <Flex py={[4, null, null, 0]}>
               <NextLink href="/" passHref>
                 <Link px="4" py="1">
-                  Send
+                  Home
+                </Link>
+              </NextLink>
+              <NextLink href="/history" passHref>
+                <Link px="4" py="1">
+                  History
+                </Link>
+              </NextLink>
+              <NextLink href="/audit" passHref>
+                <Link px="4" py="1">
+                  Audit
                 </Link>
               </NextLink>
             </Flex>

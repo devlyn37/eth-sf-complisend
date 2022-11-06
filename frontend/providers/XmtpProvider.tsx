@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Client, Conversation, Message } from '@xmtp/xmtp-js'
-import { Signer } from 'ethers'
 import { XmtpContext, XmtpContextType } from '../context/xmtp'
 import { useAccount, useSigner } from 'wagmi'
 

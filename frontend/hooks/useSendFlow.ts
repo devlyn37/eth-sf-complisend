@@ -89,8 +89,10 @@ function useLock(
 export function useSendFlow(
   recipient: string,
   amount: number,
-  onSuccess: (data: ethers.providers.TransactionReceipt) => void,
-  onError: (err: any) => void
+  onAllowSuccess: (data: ethers.providers.TransactionReceipt) => void,
+  onAllowError: (err: any) => void,
+  onLockSuccess: (data: ethers.providers.TransactionReceipt) => void,
+  onLockError: (err: any) => void
 ) {
   const { address } = useAccount()
   const bigNumberAmount = useMemo(() => {
@@ -146,7 +148,7 @@ export function useSendFlow(
     data: dataAllow,
     write: writeAllow,
     error: errorAllow,
-  } = useApprove(amount, validInput && !canLock, onSuccess, onError)
+  } = useApprove(amount, validInput && !canLock, onAllowSuccess, onAllowError)
 
   const {
     isLoading: isLoadingLock,
@@ -158,8 +160,8 @@ export function useSendFlow(
     amount,
     address as any,
     validInput && canLock,
-    onSuccess,
-    onError
+    onLockSuccess,
+    onLockError
   )
 
   console.log('Allow Contract Write Details')

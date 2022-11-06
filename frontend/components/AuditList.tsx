@@ -1,19 +1,15 @@
-import cn from 'classnames'
 import XmtpContext from '../context/xmtp'
-import React, { useState, useCallback, useContext } from 'react'
+import React, { useContext } from 'react'
 import { useAccount } from 'wagmi'
 import { LoaderBar } from './LoaderBar'
 
 import { Txn } from './Txn'
 
-export const AuditList = ({ user_type, setUserType }: any): any => {
-  //   const [filter, setFilter] = useState('sent')
-
+export const AuditList = ({}: any): any => {
   let trx_list: any = []
   const { address } = useAccount()
 
-  const { convoMessages, loadingConversations, initClient, client } =
-    useContext(XmtpContext)
+  const { convoMessages, loadingConversations } = useContext(XmtpContext)
   // console.log('MESSAGES',convoMessages)
   if (convoMessages) {
     for (let [key, value] of convoMessages) {

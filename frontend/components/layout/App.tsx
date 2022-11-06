@@ -29,13 +29,13 @@ const SubmitForm = ({ props }: any): any => {
   const { initClient, sendMessage, client } = useContext(XmtpContext)
   const toast = useToast()
 
-  const resetInputs = () => {
-    setRecieverState({ address: '' })
-    setTokenState({ amount: 0 })
-    setNotesState({ notes: '' })
-  }
+  // const resetInputs = () => {
+  //   setRecieverState({ address: '' })
+  //   setTokenState({ amount: 0 })
+  //   setNotesState({ notes: '' })
+  // }
 
-  const onSuccess = async (data: any) => {
+  const onTxnSuccess = (data: any) => {
     console.log('success data', data)
     toast({
       title: 'Transaction Successful',
@@ -56,24 +56,28 @@ const SubmitForm = ({ props }: any): any => {
       duration: 5000,
       isClosable: true,
     })
+  }
 
-    await sendMessage(
-      JSON.stringify({
-        hash: data.transactionHash,
-        note: note,
-        recipient: getAddress(recipient),
-      }),
-      getAddress(recipient)
-    )
-    await sendMessage(
-      JSON.stringify({
-        hash: data.transactionHash,
-        note: note,
-        recipient: getAddress(recipient),
-      }),
-      AUDITOR_ETH_ADDRESS
-    )
-    resetInputs()
+  const onLockSuccess = async (data: any) => {
+    onTxnSuccess(data)
+    await Promise.all([
+      sendMessage(
+        JSON.stringify({
+          hash: data.transactionHash,
+          note: note,
+          recipient: getAddress(recipient),
+        }),
+        getAddress(recipient)
+      ),
+      sendMessage(
+        JSON.stringify({
+          hash: data.transactionHash,
+          note: note,
+          recipient: getAddress(recipient),
+        }),
+        AUDITOR_ETH_ADDRESS
+      ),
+    ])
   }
 
   const onError = async (err: any) => {
@@ -93,11 +97,17 @@ const SubmitForm = ({ props }: any): any => {
   const { isLoading, write, error, state } = useSendFlow(
     recipient,
     amount,
-    onSuccess,
+    onTxnSuccess,
+    onError,
+    onLockSuccess,
     onError
   )
 
   const submit = useCallback(async () => {
+    if (!client) {
+      await initClient()
+    }
+
     await write?.()
   }, [write])
 
@@ -141,18 +151,61 @@ const SubmitForm = ({ props }: any): any => {
   )
 }
 
-const AuthForm = ({ props }: any): any => {
+const WithdrawForm = ({ props }: any): any => {
+  const [token_state, setTokenState] = useState({ amount: 0 })
+  const [reciever_state, setRecieverState] = useState({ address: '' })
+  const [notes_state, setNotesState] = useState({ notes: '' })
+
+  const recipient = reciever_state.address
+  const amount = token_state.amount
+  const note = notes_state.notes
+  const { initClient, sendMessage, client } = useContext(XmtpContext)
+  const toast = useToast()
+
+  const { address, isConnecting, isDisconnected } = useAccount()
+
+  let [withdraw_amount, setWithdrawAmount] = useState(0)
+
   return (
-    <>
-      <div className={'bg-slate-900 rounded-md p-5 w-full'}>
-        <ConnectButton />
+    <div className="bg-slate-900 p-4 rounded-md my-2">
+      <div className="text-slate-600 text-sm uppercase font-black">
+        withdraw
       </div>
-    </>
+      <div className="flex flex-col">
+        amount
+        <input
+          className="bg-slate-800 p-6 text-lg"
+          onChange={(e) => {
+            setWithdrawAmount(e.target.value as any)
+          }}
+          value={withdraw_amount}
+        ></input>
+      </div>
+      <p>
+        sending and unwrapping to <strong>{address}</strong>
+      </p>
+      <div className="flex-center p-4">
+        <button className="bg-blue-500 p-4 rounded-md font-bold">
+          <span>widthdraw</span>
+        </button>
+      </div>
+    </div>
   )
 }
 
+// const AuthForm = ({ props }: any): any => {
+//   return (
+//     <>
+//       <div className={'bg-slate-900 rounded-md p-5 w-full'}>
+//         <ConnectButton />
+//       </div>
+//     </>
+//   )
+// }
+
 const AUDITOR_ETH_ADDRESS = '0x9A8766D4A7C9bb69E536A5cAB873CeA647bE1dD8'
 import { AuditList } from '../AuditList'
+import { Layout } from './Layout'
 
 export const App = ({ customMeta }: LayoutProps): JSX.Element => {
   const { convoMessages, initClient, client } = useContext(XmtpContext)
@@ -173,95 +226,16 @@ export const App = ({ customMeta }: LayoutProps): JSX.Element => {
     }
   }, [address])
 
-  let [user_type, setUserType] = useState('user')
-
-  let user_page = (
-    <>
-      {(wallet_connectd && (
-        <div className="p-4">
-          <SubmitForm />
-        </div>
-      )) || <div></div>}
-
-      {(xmtp_connected && (
-        <div className="p-4">
-          <TxnList />
-        </div>
-      )) || (
-        <button
-          onClick={initClient}
-          className="rounded-xl bg-blue-500 px-4 p-2 font-black"
-        >
-          load transaction history
-        </button>
-      )}
-    </>
-  )
-
-  let auditor_page = (
-    <>
-      {(xmtp_connected && (
-        <div className="p-4">
-          <AuditList
-            auditor_address={AUDITOR_ETH_ADDRESS}
-            user_type="user"
-            setUserType={setUserType}
-          />
-        </div>
-      )) || (
-        <button
-          onClick={initClient}
-          className="rounded-xl bg-blue-500 px-4 p-2 font-black"
-        >
-          load transaction history
-        </button>
-      )}
-    </>
-  )
-
   return (
-    <>
+    <Layout>
       <Head customMeta={customMeta} />
       <header className="bg-slate-800 w-full h-full overflow-y-scroll text-white min-h-screen p-2">
         <div className="flex flex-col items-center">
-          <h1 className="text-center p-6 text-4xl font-bold gradient-text">
-            COMPLISEND
-          </h1>
-          <div className="p-4">
-            <AuthForm />
-          </div>
+          <WithdrawForm />
+          <SubmitForm />
           <div className="p-4"></div>
-          <div className="flex flex-col items-center w-full">
-            <div className="flex flex-row rounded-xl font-black m-2 overflow-hidden items-stretch content-stretch cursor-pointer mt-2 mb-8">
-              <div
-                onClick={setUserType.bind(null, 'user')}
-                className={
-                  'h-full p-2 px-5 ' +
-                  cn({
-                    'bg-slate-700': user_type != 'user',
-                    'bg-blue-500': user_type == 'user',
-                  })
-                }
-              >
-                user
-              </div>
-              <div
-                onClick={setUserType.bind(null, 'auditor')}
-                className={
-                  'h-full p-2 px-5 ' +
-                  cn({
-                    'bg-slate-700': user_type != 'auditor',
-                    'bg-blue-500': user_type == 'auditor',
-                  })
-                }
-              >
-                auditor
-              </div>
-            </div>
-            {(user_type == 'user' && user_page) || auditor_page}
-          </div>
         </div>
       </header>
-    </>
+    </Layout>
   )
 }
