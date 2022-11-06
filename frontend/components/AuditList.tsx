@@ -43,10 +43,22 @@ export const AuditList = ({}: any): any => {
     <div>
       <LoaderBar loading={loadingConversations}></LoaderBar>
       <div className="py-8"></div>
+
+      <div>min report amount: {MIN_REPORT_AMOUNT}</div>
+      
+      <div className="bg-green-500 text-black p-4 rounded-md my-2 w-full">
+        
+        <div className="m-2">
+          encrypted
+        </div>
+        <div className="m-2">
+          decrypted
+        </div>
+      </div>
+
       <div>
         {trx_list}
       </div>
-      
     </div>
   )
 }

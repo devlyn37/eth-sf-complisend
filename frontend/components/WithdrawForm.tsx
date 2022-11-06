@@ -105,13 +105,19 @@ export const WithdrawForm = ({ props }: any): any => {
       {!isLoading && (
         <>
           <div className="text-white text-4xl font-bold flex flex-row">
-            <span className="text-blue-800">$</span>
-            {wrappedBalance}
-            {/* Unwrapped balance */}
-            <div className="text-white text-lg font-bold flex flex-row">
-              <span className="text-blue-800">$</span>
-              {unwrappedBalance}
+            <div className='flex flex-col'>
+              <div>
+                <span className="text-blue-800">$</span>
+                {wrappedBalance} wrapped
+              </div>
+              
+              {/* Unwrapped balance */}
+              <div className="text-blue-400 text-lg font-bold flex flex-row">
+                <span className="text-blue-800">$</span>
+                {unwrappedBalance} unwrapped
+              </div>
             </div>
+            
             {}
             <a
               target="_blank"
@@ -125,7 +131,7 @@ export const WithdrawForm = ({ props }: any): any => {
             </a>
           </div>
           <div className="p-4 w-full flex flex-row items-center content-center align-center justify-center">
-            <button
+            {/* <button
               disabled={!hasEnough}
               className="outline-4 hover:outline outline-blue-800 p-2 px-8 flex flex-row items-center text-lg rounded-xl text-black bg-white m-4"
               onClick={() => {
@@ -135,17 +141,29 @@ export const WithdrawForm = ({ props }: any): any => {
             >
               <ArrowUpTrayIcon className="w-12 p-3"></ArrowUpTrayIcon>withdraw
               ALL
+            </button> */}
+            <div className='flex flex-row outline-4 hover:outline outline-blue-800  p-2 px-8 flex flex-row items-center text-lg rounded-xl text-black bg-blue-500 m-4'>
+              <span className='flex text-blue-400 text-lg'>$</span>
+                <input
+                  disabled={!hasEnough}
+                  className="bg-transparent text-white text-2xl w-32 outline-none placeholder-blue-300"
+                  placeholder={'max: $'+wrappedBalance}
+                  type='number'
+                  onChange={(e) => {
+                    setAmount(Math.min(wrappedBalance,Number(e.target.value || 0)))
+                  }}
+                />
+                
+            </div>
+            <button className='bg-white rounded-xl text-black flex flex-row items-center px-4' onClick={(e)=>{
+              e.preventDefault()
+              submit()
+            }}>
+              <ArrowUpTrayIcon className="w-12 p-3 text-black"></ArrowUpTrayIcon>
+              <span className=''>withdraw</span>
             </button>
-            <button
-              disabled={!hasEnough}
-              className="outline-4 hover:outline outline-blue-800  p-2 px-8 flex flex-row items-center text-lg rounded-xl text-black bg-blue-500 m-4"
-              onClick={() => {
-                setAmount(50)
-                submit()
-              }}
-            >
-              <ArrowUpTrayIcon className="w-12 p-3"></ArrowUpTrayIcon> 50
-            </button>
+            
+            
           </div>
         </>
       )}
@@ -157,7 +175,7 @@ export const WithdrawForm = ({ props }: any): any => {
           </div>
           {/* <div className='w-full flex items-center p-4'>  </div> */}
           <p>
-            unwrapping amd sending {unwrappedBalance} of {MOCK_TOKEN} to{' '}
+            unwrapping amd sending {amount} of {MOCK_TOKEN} to{' '}
             <strong>{address}</strong>
           </p>
         </>
