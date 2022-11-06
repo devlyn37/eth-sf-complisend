@@ -21,8 +21,6 @@ const WRAPPED_TOKEN_ABI = require('../artifacts/contracts/WrappedToken.sol/Wrapp
 const MOCK_TOKEN = '0xf38d32C01233eDAF3b61DAaD0eb598521688C3C6'
 const WRAPPED_TOKEN_ADDRESS = '0x02052ABEC1ccc18093022b6b648b9754201C7D5f'
 
-
-
 const Home: NextPage = () => {
   const { address } = useAccount()
   const [amount, setAmount] = useState(0)

@@ -27,14 +27,6 @@ export function OverlayDialog({
         <div className="fixed inset-0 left-0 top-0 w-screen h-screen flex items-center justify-center z-30 ">
           <Dialog.Panel className="mx-auto h-fit w-96 p-4 text-slate-200">
             {children}
-            <div className="p-2 w-full flex items-center justify-center flex-row">
-              <button
-                className="bg-blue-500 rounded-md p-2 px-4 m-4"
-                onClick={onSubmit}
-              >
-                submit
-              </button>
-            </div>
           </Dialog.Panel>
         </div>
       </Transition>

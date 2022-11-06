@@ -1,103 +1,102 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { OverlayDialog } from './OverlayDialog'
-import {WalletIcon} from '@heroicons/react/24/solid'
+import { WalletIcon,CurrencyDollarIcon,PencilSquareIcon} from '@heroicons/react/24/solid'
 import cn from 'classnames'
 
-interface TokenState {
-  amount: number
-}
-export const SetTokenForm = ({
-  state,
-  onSet,
-}: {
-  state: TokenState
-  onSet: (state: TokenState) => void
-}): any => {
-  const [amount, setAmount] = useState(0)
+export const SetTokenForm = ({ state, setState }: any): any => {
   const [open_form, setFormOpen] = useState(false)
 
-  const onSetAmountChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const x = Number.parseFloat(event.target.value)
+  const onSetAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const x = Number.parseFloat(event.target.value)
 
-      setAmount(Number.isNaN(x) ? 0 : x)
-      
-    },
-    []
-  )
-  
+    setState({
+      amount: Number.isNaN(x) ? 0 : x,
+    })
+  }
 
   const onSubmit = (e: any) => {
     e.preventDefault()
-
-    onSet({
-      amount: amount,
-    })
     setFormOpen(false)
   }
 
+  let [is_focus, setFocus] = useState(false)
+
   return (
     <>
-      <OverlayDialog
+      <div
+        className={cn({
+          'flex flex-row bg-slate-700 p-4 text-lg w-full rounded-lg outline-4 outline-blue-500':
+            true,
+          outline: is_focus,
+        })}
+      >
+        <CurrencyDollarIcon className={cn({ 'w-10 text-white': true })}></CurrencyDollarIcon>
+        <input
+          className="bg-transparent p-4 text-xl font-bold text-cyan-500 w-full rounded-lg outline-none"
+          onChange={onSetAmountChange}
+          autoComplete="on"
+          name="wallet_address"
+          onFocus={setFocus.bind(null, true)}
+          onBlur={setFocus.bind(null, false)}
+          placeholder="wallet address"
+          value={state.amount}
+        ></input>
+      </div>
+      {/* <OverlayDialog
         show={open_form}
         onSubmit={onSubmit}
         onClose={setFormOpen.bind(null, false)}
-      >
-        <div className="p-2">set amount</div>
-        <input
-          className="bg-slate-800 p-6 text-lg"
-          onChange={onSetAmountChange}
-          value={amount}
-        ></input>
-      </OverlayDialog>
-      <div
+      > */}
+      {/* <div className="p-2">set amount</div> */}
+      
+      {/* </OverlayDialog> */}
+      {/* <div
         className="rounded-md p-4 bg-slate-700 cursor-pointer"
         onClick={setFormOpen.bind(null, true)}
       >
-        {!amount ? 'set amount' : amount}
-      </div>
+        {!state.amount ? 'set amount' : state.amount}
+      </div> */}
     </>
   )
 }
 
-export const SetNotesForm = ({ state, onSet }: any): any => {
-  const [notes, setNotes] = useState('')
+export const SetNotesForm = ({ state = {}, onSet }: any): any => {
   const [open_form, setFormOpen] = useState(false)
-
+  console.log(state)
   const onSetNotesChange = (e: any) => {
-    setNotes(e.target.value)
+    onSet({ notes: e.target.value })
   }
 
-  const onSubmit = (e: any) => {
-    e.preventDefault()
-
-    onSet({
-      notes: notes,
-    })
-    setFormOpen(false)
-  }
+  let [is_focus, setFocus] = useState(false)
 
   return (
     <>
-      <OverlayDialog
-        show={open_form}
-        onSubmit={onSubmit}
-        onClose={setFormOpen.bind(null, false)}
+     <div
+        className={cn({
+          'flex flex-row bg-slate-700 p-4 text-lg w-full rounded-lg outline-4 outline-blue-500':
+            true,
+          outline: is_focus,
+        })}
       >
-        <div className="p-2">set notes</div>
-        <textarea
-          className="bg-slate-800 p-6 text-lg"
+        <PencilSquareIcon className={cn({ 'w-10 text-white': true })}></PencilSquareIcon>
+        <input
+          className="bg-transparent p-4 text-xl font-bold text-cyan-500 w-full rounded-lg outline-none"
           onChange={onSetNotesChange}
-          value={notes}
-          placeholder="set notes"
-        ></textarea>
-      </OverlayDialog>
-      <div
+          autoComplete="on"
+          name="wallet_address"
+          onFocus={setFocus.bind(null, true)}
+          onBlur={setFocus.bind(null, false)}
+          placeholder="notes"
+          value={state.notes}
+        ></input>
+      </div>
+    
+      {/* <div
         onClick={setFormOpen.bind(null, true)}
         className="rounded-md p-4 bg-slate-800 cursor-pointer"
       >
-        {!notes ? 'set notes' : notes}
-      </div>
+        {!state.notes ? 'set notes' : state.notes}
+      </div> */}
     </>
   )
 }
@@ -110,45 +109,43 @@ let onAddrChange = function(e:any){
 } */
 }
 
-export const SetRecieverForm = ({ state, onSet }: any): any => {
-  const [address, setAddress] = useState('')
+export const SetRecieverForm = ({ state = {}, onSet }: any): any => {
   const [open_form, setFormOpen] = useState(false)
 
-  const onSetAddressChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setAddress(event.target.value)
-      onSet({
-        address: event.target.value
-      })
-    },
-    []
-  )
+  const onSetAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onSet({
+      address: event.target.value,
+    })
+  }
 
   const onSubmit = (e: any) => {
     e.preventDefault()
     // console.log('submit')
-    onSet({
-      address: address,
-    })
+
     setFormOpen(false)
   }
 
-  let [is_focus,setFocus] = useState(false)
+  let [is_focus, setFocus] = useState(false)
 
   return (
     <div
-      className={cn({'flex flex-row bg-black p-4 text-lg w-full rounded-lg outline-4 outline-blue-500':true,'outline':is_focus})}
+      className={cn({
+        'flex flex-row bg-slate-700 p-4 text-lg w-full rounded-lg outline-4 outline-blue-500':
+          true,
+        outline: is_focus,
+      })}
     >
-      <WalletIcon className={cn({'w-10 text-white':true})}></WalletIcon>
+      <WalletIcon className={cn({ 'w-10 text-white': true })}></WalletIcon>
       <input
         className="bg-transparent p-4 text-xl font-bold text-cyan-500 w-full rounded-lg outline-none"
         onChange={onSetAddressChange}
         autoComplete="on"
-        name='wallet_address'
-        onFocus={setFocus.bind(null,true)}
-        onBlur={setFocus.bind(null,false)}
+        name="wallet_address"
+        onFocus={setFocus.bind(null, true)}
+        onBlur={setFocus.bind(null, false)}
         placeholder="wallet address"
-        value={address}></input>
+        value={state.address}
+      ></input>
     </div>
   )
 }

@@ -19,7 +19,11 @@ describe("WrappedToken", () => {
       const wrappedTokenFactory = await ethers.getContractFactory(
         "WrappedToken"
       );
-      wrappedToken = await wrappedTokenFactory.deploy("0x" + "0".repeat(40));
+      wrappedToken = await wrappedTokenFactory.deploy(
+        ethers.constants.AddressZero,
+        ethers.constants.AddressZero,
+        ethers.constants.AddressZero
+      );
     });
 
     it("should lock token", async () => {
@@ -171,6 +175,7 @@ describe("WrappedToken", () => {
 
   describe("ERC721Transfer", () => {
     let wrappedToken: WrappedToken;
+    let kycNFT: MockNFT;
     let mockNFT: MockNFT;
     let accounts: SignerWithAddress[];
 
@@ -178,12 +183,17 @@ describe("WrappedToken", () => {
       accounts = await ethers.getSigners();
 
       const MockNFTFactory = await ethers.getContractFactory("MockNFT");
+      kycNFT = await MockNFTFactory.deploy("KYCNFT", "KT");
       mockNFT = await MockNFTFactory.deploy("MockToken", "MT");
 
       const wrappedTokenFactory = await ethers.getContractFactory(
         "WrappedToken"
       );
-      wrappedToken = await wrappedTokenFactory.deploy("0x" + "0".repeat(40));
+      wrappedToken = await wrappedTokenFactory.deploy(
+        ethers.constants.AddressZero,
+        ethers.constants.AddressZero,
+        ethers.constants.AddressZero
+      );
     });
 
     it("should lock token", async () => {
@@ -243,8 +253,9 @@ describe("WrappedToken", () => {
     });
 
     it("should check KYC", async () => {
-      await wrappedToken.setKYCToken(mockNFT.address);
+      await wrappedToken.setKYCToken(kycNFT.address);
 
+      await (await kycNFT.mint(accounts[0].address, 0)).wait();
       await (await mockNFT.mint(accounts[0].address, 0)).wait();
 
       await mockNFT.approve(wrappedToken.address, 0);
@@ -267,8 +278,7 @@ describe("WrappedToken", () => {
         )
       ).to.be.revertedWith("recipient doesn't have KYC token");
 
-      await (await mockNFT.mint(accounts[0].address, 1)).wait();
-      await (await mockNFT.mint(accounts[1].address, 2)).wait();
+      await (await kycNFT.mint(accounts[1].address, 1)).wait();
 
       expect(
         wrappedToken.safeTransferFrom(
