@@ -6,10 +6,24 @@
 import fs from "fs";
 import { config, ethers } from "hardhat";
 
+// Push Comm Addresses
+// Ethereum Mainnet
+// 0xb3971BCef2D791bc4027BbfedFb47319A4AAaaAa
+// Ethereum Goerli Testnet
+// 0xb3971BCef2D791bc4027BbfedFb47319A4AAaaAa
+// Polygon Mainnet
+// 0xb3971BCef2D791bc4027BbfedFb47319A4AAaaAa
+// Polygon Mumbai
+// 0xb3971BCef2D791bc4027BbfedFb47319A4AAaaAa
+
 async function main() {
   const WrappedTokenFactory = await ethers.getContractFactory("WrappedToken");
   const wrappedToken = await WrappedTokenFactory.deploy(
-    ethers.constants.AddressZero
+    ethers.constants.AddressZero,
+    // Push Comm Address
+    "0xb3971BCef2D791bc4027BbfedFb47319A4AAaaAa",
+    // An account that created Push channel
+    "0x68E7BD8736DeD1dF80cBe5FD74a50e904F6C6f3F"
   );
   await wrappedToken.deployed();
 

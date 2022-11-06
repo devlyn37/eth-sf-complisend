@@ -20,7 +20,7 @@ async function main() {
     WRAPPED_TOKEN_ADDRESS
   );
 
-  const value = ethers.utils.parseEther("10");
+  const value = ethers.utils.parseEther("1000");
 
   const depositTx = await wrappedToken.releaseERC20(
     erc20Token.address,

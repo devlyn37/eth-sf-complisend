@@ -4,4 +4,8 @@
 import type * as mock from "./mock";
 export type { mock };
 export type { IBalanceOf } from "./IBalanceOf";
+export type { IPUSHCommInterface } from "./IPUSHCommInterface";
+export type { KYCERC20Votes } from "./KYCERC20Votes";
+export type { KYCERC721Votes } from "./KYCERC721Votes";
+export type { KYCVerifier } from "./KYCVerifier";
 export type { WrappedToken } from "./WrappedToken";

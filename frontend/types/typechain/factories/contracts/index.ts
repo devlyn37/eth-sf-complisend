@@ -3,4 +3,8 @@
 /* eslint-disable */
 export * as mock from "./mock";
 export { IBalanceOf__factory } from "./IBalanceOf__factory";
+export { IPUSHCommInterface__factory } from "./IPUSHCommInterface__factory";
+export { KYCERC20Votes__factory } from "./KYCERC20Votes__factory";
+export { KYCERC721Votes__factory } from "./KYCERC721Votes__factory";
+export { KYCVerifier__factory } from "./KYCVerifier__factory";
 export { WrappedToken__factory } from "./WrappedToken__factory";

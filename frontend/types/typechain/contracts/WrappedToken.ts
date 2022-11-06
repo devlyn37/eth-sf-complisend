@@ -29,6 +29,8 @@ import type {
 
 export interface WrappedTokenInterface extends utils.Interface {
   functions: {
+    "_channelAddress()": FunctionFragment;
+    "_push()": FunctionFragment;
     "balanceOf(address,uint256)": FunctionFragment;
     "balanceOfBatch(address[],uint256[])": FunctionFragment;
     "erc20TokenID(address)": FunctionFragment;
@@ -46,6 +48,7 @@ export interface WrappedTokenInterface extends utils.Interface {
     "safeTransferFrom(address,address,uint256,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
     "setKYCToken(address)": FunctionFragment;
+    "setPushProtocol(address,address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "unpause()": FunctionFragment;
@@ -54,6 +57,8 @@ export interface WrappedTokenInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "_channelAddress"
+      | "_push"
       | "balanceOf"
       | "balanceOfBatch"
       | "erc20TokenID"
@@ -71,12 +76,18 @@ export interface WrappedTokenInterface extends utils.Interface {
       | "safeTransferFrom"
       | "setApprovalForAll"
       | "setKYCToken"
+      | "setPushProtocol"
       | "supportsInterface"
       | "transferOwnership"
       | "unpause"
       | "uri"
   ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "_channelAddress",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "_push", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "balanceOf",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
@@ -171,6 +182,10 @@ export interface WrappedTokenInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
+    functionFragment: "setPushProtocol",
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [PromiseOrValue<BytesLike>]
   ): string;
@@ -184,6 +199,11 @@ export interface WrappedTokenInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "_channelAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "_push", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "balanceOfBatch",
@@ -235,6 +255,10 @@ export interface WrappedTokenInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setPushProtocol",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
@@ -247,8 +271,8 @@ export interface WrappedTokenInterface extends utils.Interface {
 
   events: {
     "ApprovalForAll(address,address,bool)": EventFragment;
-    "LockedERC20(address,uint256,address,address,address,uint256,bytes)": EventFragment;
-    "LockedERC721(address,uint256,uint256,address,address,address,bytes)": EventFragment;
+    "LockedERC20(address,uint256,address,address,uint256,bytes)": EventFragment;
+    "LockedERC721(address,uint256,uint256,address,address,bytes)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
     "ReleasedERC20(address,uint256,address,address,uint256,bytes)": EventFragment;
@@ -287,14 +311,13 @@ export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>;
 export interface LockedERC20EventObject {
   tokenAddress: string;
   erc1155TokenID: BigNumber;
-  operator: string;
   from: string;
   to: string;
   amount: BigNumber;
   data: string;
 }
 export type LockedERC20Event = TypedEvent<
-  [string, BigNumber, string, string, string, BigNumber, string],
+  [string, BigNumber, string, string, BigNumber, string],
   LockedERC20EventObject
 >;
 
@@ -304,13 +327,12 @@ export interface LockedERC721EventObject {
   tokenAddress: string;
   tokenID: BigNumber;
   erc1155TokenID: BigNumber;
-  operator: string;
   from: string;
   to: string;
   data: string;
 }
 export type LockedERC721Event = TypedEvent<
-  [string, BigNumber, BigNumber, string, string, string, string],
+  [string, BigNumber, BigNumber, string, string, string],
   LockedERC721EventObject
 >;
 
@@ -435,6 +457,10 @@ export interface WrappedToken extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    _channelAddress(overrides?: CallOverrides): Promise<[string]>;
+
+    _push(overrides?: CallOverrides): Promise<[string]>;
+
     balanceOf(
       account: PromiseOrValue<string>,
       id: PromiseOrValue<BigNumberish>,
@@ -539,6 +565,12 @@ export interface WrappedToken extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    setPushProtocol(
+      pushComm: PromiseOrValue<string>,
+      channelAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -558,6 +590,10 @@ export interface WrappedToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
   };
+
+  _channelAddress(overrides?: CallOverrides): Promise<string>;
+
+  _push(overrides?: CallOverrides): Promise<string>;
 
   balanceOf(
     account: PromiseOrValue<string>,
@@ -663,6 +699,12 @@ export interface WrappedToken extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  setPushProtocol(
+    pushComm: PromiseOrValue<string>,
+    channelAddress: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   supportsInterface(
     interfaceId: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
@@ -683,6 +725,10 @@ export interface WrappedToken extends BaseContract {
   ): Promise<string>;
 
   callStatic: {
+    _channelAddress(overrides?: CallOverrides): Promise<string>;
+
+    _push(overrides?: CallOverrides): Promise<string>;
+
     balanceOf(
       account: PromiseOrValue<string>,
       id: PromiseOrValue<BigNumberish>,
@@ -783,6 +829,12 @@ export interface WrappedToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setPushProtocol(
+      pushComm: PromiseOrValue<string>,
+      channelAddress: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -813,10 +865,9 @@ export interface WrappedToken extends BaseContract {
       approved?: null
     ): ApprovalForAllEventFilter;
 
-    "LockedERC20(address,uint256,address,address,address,uint256,bytes)"(
+    "LockedERC20(address,uint256,address,address,uint256,bytes)"(
       tokenAddress?: null,
       erc1155TokenID?: null,
-      operator?: null,
       from?: null,
       to?: null,
       amount?: null,
@@ -825,18 +876,16 @@ export interface WrappedToken extends BaseContract {
     LockedERC20(
       tokenAddress?: null,
       erc1155TokenID?: null,
-      operator?: null,
       from?: null,
       to?: null,
       amount?: null,
       data?: null
     ): LockedERC20EventFilter;
 
-    "LockedERC721(address,uint256,uint256,address,address,address,bytes)"(
+    "LockedERC721(address,uint256,uint256,address,address,bytes)"(
       tokenAddress?: null,
       tokenID?: null,
       erc1155TokenID?: null,
-      operator?: null,
       from?: null,
       to?: null,
       data?: null
@@ -845,7 +894,6 @@ export interface WrappedToken extends BaseContract {
       tokenAddress?: null,
       tokenID?: null,
       erc1155TokenID?: null,
-      operator?: null,
       from?: null,
       to?: null,
       data?: null
@@ -938,6 +986,10 @@ export interface WrappedToken extends BaseContract {
   };
 
   estimateGas: {
+    _channelAddress(overrides?: CallOverrides): Promise<BigNumber>;
+
+    _push(overrides?: CallOverrides): Promise<BigNumber>;
+
     balanceOf(
       account: PromiseOrValue<string>,
       id: PromiseOrValue<BigNumberish>,
@@ -1042,6 +1094,12 @@ export interface WrappedToken extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    setPushProtocol(
+      pushComm: PromiseOrValue<string>,
+      channelAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -1063,6 +1121,10 @@ export interface WrappedToken extends BaseContract {
   };
 
   populateTransaction: {
+    _channelAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    _push(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     balanceOf(
       account: PromiseOrValue<string>,
       id: PromiseOrValue<BigNumberish>,
@@ -1164,6 +1226,12 @@ export interface WrappedToken extends BaseContract {
 
     setKYCToken(
       kycToken: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setPushProtocol(
+      pushComm: PromiseOrValue<string>,
+      channelAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
