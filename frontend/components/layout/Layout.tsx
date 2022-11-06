@@ -23,8 +23,8 @@ export const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
   //@ts-ignore
   const is_auditor = (String(address) == AUDITOR_ETH_ADDRESS)
 
-  let [toggle_a,toggleA] = React.useState(connectedOwnsNFT)
-  let [toggle_b,toggleB] = React.useState(connectedOwnsNFT)
+  let [toggle_a,toggleA] = React.useState(true)
+  let [toggle_b,toggleB] = React.useState(true)
   let [toggle_c,toggleC] = React.useState(connectedOwnsNFT)
 
 
@@ -72,7 +72,7 @@ export const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
           <div className='w-full flex flex-row w-full items-center justify-center'>
             {verifiedBadge('kyc',toggle_a,toggleA)}
             {verifiedBadge('wallet',toggle_b,toggleB)}
-            {verifiedBadge('token',toggle_c,toggleC)}
+            {verifiedBadge('token',connectedOwnsNFT,toggleC)}
           </div>      
         </div>  
         {children}
