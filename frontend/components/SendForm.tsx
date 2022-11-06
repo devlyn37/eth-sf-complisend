@@ -2,6 +2,7 @@ import { Button, Link, Text, useToast } from '@chakra-ui/react'
 import { getAddress } from 'ethers/lib/utils'
 import { useCallback, useContext, useState } from 'react'
 import XmtpContext from '../context/xmtp'
+import { useCheckOwnership } from '../hooks/useCheckOwnership'
 import { useSendFlow } from '../hooks/useSendFlow'
 import { SetNotesForm, SetRecieverForm, SetTokenForm } from './form'
 import { LoaderBar } from './LoaderBar'
@@ -19,6 +20,16 @@ export const Sendform = ({ props }: any): any => {
   const note = notes_state.notes
   const { initClient, sendMessage, client } = useContext(XmtpContext)
   const toast = useToast()
+
+  let formattedRecipientAddress: string | undefined
+  try {
+    formattedRecipientAddress = getAddress(recipient)
+  } catch (e) {
+    formattedRecipientAddress = undefined
+  }
+
+  const ownsNFT = useCheckOwnership(formattedRecipientAddress)
+  console.log(ownsNFT)
 
   const onTxnSuccess = (data: any) => {
     console.log('success data', data)
@@ -120,6 +131,7 @@ export const Sendform = ({ props }: any): any => {
         </div>
 
         <div className="w-full p-4 flex items-center justify-center">
+          <div>{`recipient owns NFT: ${ownsNFT}`}</div>
           <Button
             disabled={!write || isLoading}
             className="p-3 px-8 bg-blue-600 rounded-xl font-black"
