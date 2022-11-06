@@ -1,43 +1,43 @@
 import cn from 'classnames'
 import XmtpContext from '../context/xmtp'
 import React, { useState, useCallback, useContext } from 'react'
-import {useAccount} from 'wagmi'
+import { useAccount } from 'wagmi'
 import { LoaderBar } from './LoaderBar'
 
-import {Txn} from './Txn'
+import { Txn } from './Txn'
 
-export const AuditList = ({ user_type,setUserType }: any): any => {
-//   const [filter, setFilter] = useState('sent')
+export const AuditList = ({ user_type, setUserType }: any): any => {
+  //   const [filter, setFilter] = useState('sent')
 
   let trx_list: any = []
   const { address } = useAccount()
 
-  const { convoMessages, loadingConversations,initClient, client } = useContext(XmtpContext)
+  const { convoMessages, loadingConversations, initClient, client } =
+    useContext(XmtpContext)
   // console.log('MESSAGES',convoMessages)
-  if(convoMessages){
+  if (convoMessages) {
     for (let [key, value] of convoMessages) {
-      try{
+      try {
         let reciever = key
-        value.forEach((msg)=>{
-          try{
-            let txn = JSON.parse(msg.content)
-			trx_list.push(<Txn key={msg.id} txn={txn} />)
-          }catch(e){
+        value.forEach((msg) => {
+          try {
+            let txn = JSON.parse((msg as any).contact)
+            trx_list.push(<Txn key={msg.id} txn={txn} />)
+          } catch (e) {
             console.error(e)
             console.log('failed to parse txn')
           }
         })
-        
-      }catch(e){
+      } catch (e) {
         console.error('invalid message')
       }
     }
   }
 
   return (
-	<div>
+    <div>
       <LoaderBar loading={loadingConversations}></LoaderBar>
-      <div className='py-8'></div>
+      <div className="py-8"></div>
       {trx_list}
     </div>
   )
