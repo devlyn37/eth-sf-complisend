@@ -40,6 +40,8 @@ export type { IERC165 } from "./@openzeppelin/contracts/utils/introspection/IERC
 export { IERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/IERC165__factory";
 export type { IBalanceOf } from "./contracts/IBalanceOf";
 export { IBalanceOf__factory } from "./factories/contracts/IBalanceOf__factory";
+export type { IPUSHCommInterface } from "./contracts/IPUSHCommInterface";
+export { IPUSHCommInterface__factory } from "./factories/contracts/IPUSHCommInterface__factory";
 export type { MockNFT } from "./contracts/mock/MockNFT";
 export { MockNFT__factory } from "./factories/contracts/mock/MockNFT__factory";
 export type { MockToken } from "./contracts/mock/MockToken";

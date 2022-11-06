@@ -20,21 +20,15 @@ async function main() {
     WRAPPED_TOKEN_ADDRESS
   );
 
-  const value = ethers.utils.parseEther("1000");
-
-  const depositTx = await wrappedToken.releaseERC20(
-    erc20Token.address,
+  const tx = await wrappedToken.safeTransferFrom(
     account.address,
-    value,
+    "0xE898BBd704CCE799e9593a9ADe2c1cA0351Ab660",
+    await wrappedToken.erc20TokenID(erc20Token.address),
+    ethers.utils.parseEther("10000"),
     ethers.utils.toUtf8Bytes("test")
   );
-  await depositTx.wait();
 
-  console.log(
-    `Withdrew ${value.toString()} tokens from ${
-      account.address
-    } in WrappedToken`
-  );
+  await tx.wait();
 }
 
 // We recommend this pattern to be able to use async/await everywhere

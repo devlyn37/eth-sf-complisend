@@ -81,6 +81,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IBalanceOf__factory>;
     getContractFactory(
+      name: "IPUSHCommInterface",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IPUSHCommInterface__factory>;
+    getContractFactory(
       name: "MockNFT",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MockNFT__factory>;
@@ -178,6 +182,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IBalanceOf>;
+    getContractAt(
+      name: "IPUSHCommInterface",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IPUSHCommInterface>;
     getContractAt(
       name: "MockNFT",
       address: string,

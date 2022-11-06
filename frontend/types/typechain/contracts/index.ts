@@ -4,4 +4,5 @@
 import type * as mock from "./mock";
 export type { mock };
 export type { IBalanceOf } from "./IBalanceOf";
+export type { IPUSHCommInterface } from "./IPUSHCommInterface";
 export type { WrappedToken } from "./WrappedToken";

@@ -3,4 +3,5 @@
 /* eslint-disable */
 export * as mock from "./mock";
 export { IBalanceOf__factory } from "./IBalanceOf__factory";
+export { IPUSHCommInterface__factory } from "./IPUSHCommInterface__factory";
 export { WrappedToken__factory } from "./WrappedToken__factory";

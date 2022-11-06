@@ -6,11 +6,11 @@
 import { ethers } from "hardhat";
 import { MockToken } from "../frontend/types/typechain";
 
-const ERC20_TOKEN_ADDRESS = process.env.ERC20_TOKEN_ADDRESS ?? "";
-const WRAPPED_TOKEN_ADDRESS = process.env.WRAPPED_TOKEN_ADDRESS ?? "";
+const ERC20_TOKEN_ADDRESS = "0xf38d32C01233eDAF3b61DAaD0eb598521688C3C6";
+const WRAPPED_TOKEN_ADDRESS = "0x02052ABEC1ccc18093022b6b648b9754201C7D5f";
 
 async function main() {
-  const [account] = await ethers.getSigners();
+  const [account, account2] = await ethers.getSigners();
   const erc20Token = (await ethers.getContractAt(
     "MockToken",
     ERC20_TOKEN_ADDRESS
@@ -20,21 +20,21 @@ async function main() {
     WRAPPED_TOKEN_ADDRESS
   );
 
-  const value = ethers.utils.parseEther("1000");
+  for (let i = 1; i <= 15; i++) {
+    const transferTx = await wrappedToken.safeTransferFrom(
+      account.address,
+      account2.address,
+      await wrappedToken.erc20TokenID(erc20Token.address),
+      2,
+      ethers.utils.toUtf8Bytes("test"),
+      {
+        gasPrice: 20000000000,
+      }
+    );
+    await transferTx.wait();
 
-  const depositTx = await wrappedToken.releaseERC20(
-    erc20Token.address,
-    account.address,
-    value,
-    ethers.utils.toUtf8Bytes("test")
-  );
-  await depositTx.wait();
-
-  console.log(
-    `Withdrew ${value.toString()} tokens from ${
-      account.address
-    } in WrappedToken`
-  );
+    console.log(`${i} done`);
+  }
 }
 
 // We recommend this pattern to be able to use async/await everywhere
