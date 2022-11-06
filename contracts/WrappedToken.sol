@@ -225,7 +225,12 @@ contract WrappedToken is
         bytes memory data
     ) internal override {
         // minting or burning are pushed in other functions
-        if (from == address(0x0) || to == address(0x0)) {
+        if (
+            from == address(0x0) ||
+            to == address(0x0) ||
+            address(_push) == address(0x0) ||
+            _channelAddress == address(0x0)
+        ) {
             return;
         }
 
