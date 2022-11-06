@@ -7,7 +7,7 @@ import { useSendFlow } from '../hooks/useSendFlow'
 import { SetNotesForm, SetRecieverForm, SetTokenForm } from './form'
 import { LoaderBar } from './LoaderBar'
 import { OverlayDialog } from './OverlayDialog'
-import {ImageUpload} from './ImageUpload'
+import { ImageUpload } from './ImageUpload'
 
 const AUDITOR_ETH_ADDRESS = '0x9A8766D4A7C9bb69E536A5cAB873CeA647bE1dD8'
 
