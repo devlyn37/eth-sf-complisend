@@ -9,28 +9,35 @@ export const TxnList = ({ props }: any): any => {
   const [filter, setFilter] = useState('sent')
 
   let trx_list: any = []
+  let keys_used:any = {}
   const { address } = useAccount()
 
-  const { convoMessages, loadingConversations, initClient, client } =
+  const { convoMessages, conversations,loadingConversations, initClient, client } =
     useContext(XmtpContext)
-  // console.log('MESSAGES',convoMessages)
   if (convoMessages) {
+    // console.log(conversations)
     for (let [key, value] of convoMessages) {
+      // console.log
       try {
         let reciever = key
         value.forEach((msg) => {
-          try {
-            // console.log(txn)
 
+          try {
             let txn = JSON.parse((msg as any).content)
 
             if (filter == 'sent') {
               if (msg.senderAddress == address) {
-                trx_list.push(<Txn key={msg.id} txn={txn} />)
+                if(!keys_used[txn.hash]){
+                  trx_list.push(<Txn from={msg.senderAddress} to={(msg as any).recipientAddress} key={txn.hash} txn={txn} />)
+                  keys_used[txn.hash] = true
+                }
               }
             } else if (filter == 'received') {
               if ((msg as any).recipientAddress == address) {
-                trx_list.push(<Txn key={msg.id} txn={txn} />)
+                if(!keys_used[txn.hash]){
+                  trx_list.push(<Txn from={msg.senderAddress} to={(msg as any).recipientAddress} key={txn.hash} txn={txn} />)
+                  keys_used[txn.hash] = true
+                }
               }
             }
           } catch (e) {
@@ -45,14 +52,14 @@ export const TxnList = ({ props }: any): any => {
   }
 
   return (
-    <div className="flex flex-col items-center w-full">
-      <div className="flex flex-row rounded-xl font-black bg-blue-500 m-2 overflow-hidden items-stretch content-stretch cursor-pointer mt-2 mb-8">
+    <div className="flex flex-col items-left w-full">
+      <div className="flex w-fit flex-row rounded-md font-black bg-slate-800 overflow-hidden items-start content-start cursor-pointer mt-12 mb-1">
         <div
           onClick={setFilter.bind(null, 'sent')}
           className={
             'h-full p-2 px-5 ' +
             cn({
-              'bg-slate-700': filter != 'sent',
+              'bg-slate-800': filter != 'sent',
               'bg-blue-500': filter == 'sent',
             })
           }
@@ -64,7 +71,7 @@ export const TxnList = ({ props }: any): any => {
           className={
             'h-full p-2 px-5 ' +
             cn({
-              'bg-slate-700': filter != 'received',
+              'bg-slate-800': filter != 'received',
               'bg-blue-500': filter == 'received',
             })
           }
@@ -72,12 +79,11 @@ export const TxnList = ({ props }: any): any => {
           received
         </div>
       </div>
-      <LoaderBar loading={loadingConversations}></LoaderBar>
-      <div className="py-8"></div>
+      {loadingConversations && <div className='pt-4'><LoaderBar loading={loadingConversations}></LoaderBar></div>}
       <div className='w-full flex flex-col align-center items-center justify-center'>
-        <div className='w-full flex flex-col align-center items-center justify-center w-1/2'>
-          {trx_list}
-        </div>
+        {/* <div className='w-full flex flex-col align-center items-center justify-center w-1/2'> */}
+        {trx_list}
+        {/* </div> */}
       </div>
     </div>
   )
