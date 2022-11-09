@@ -20,7 +20,7 @@ This project started at SF ETH Global hackathon
 - send a message to the receiver using xmtp, ipfs, livepeer
 - report the encrypted transaction as an xmtp message and as a mina state
 - tellor and uma as oracles
-
+![send screen not verified](https://github.com/devlyn37/eth-sf-complisend/raw/main/screenshots/Screen_Shot_2022-11-06_at_11.13.16_AM.png)
 
 ## Getting Started
 
