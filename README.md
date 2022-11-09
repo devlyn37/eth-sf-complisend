@@ -11,20 +11,20 @@ This project started at SF ETH Global 2022 hackathon
 
 ## Features
 
-- transfer only if the recipient has KYC_SBT (non-transferable NFT with zk proof of identity that we built at eth NYC [showcase](https://ethglobal.com/showcase/zk-kyc-sbt-ozwb2))
-- modified transfer function for ERC20 and ERC721
-- with the transfer, send notes (like Venmo), Photos, zkp, and videos
-- DAO voting with the transfer tokens
-- reporting of over $3000 transaction (anti-money-laundry and money business law compliance)
-- push notification
-- oracle checks black-listed addresses and white-listed tokens [TODO]
+- **transfer** only if the recipient has **KYC_SBT** (non-transferable NFT with zk proof of identity that we built at eth NYC [showcase](https://ethglobal.com/showcase/zk-kyc-sbt-ozwb2))
+- modified transfer function for **ERC20** and **ERC721**
+- with the transfer, send **notes** (like Venmo), Photos, zkp, and videos
+- **DAO** voting with the transfer tokens
+- **reporting** of over $3000 transaction (anti-money-laundry and money business law compliance)
+- **push** notification
+- oracle checks **black-listed** addresses and **white-listed** tokens [TODO]
 
 ## How we do it
 
-- wrap tokens into voting erc1155 with a modified transfer function that checks for KYC-SBT
-- send a message to the receiver using xmtp, ipfs, livepeer
-- report the encrypted transaction as an xmtp message and as a mina state
-- tellor and uma as oracles
+- **wrap** tokens into voting erc1155 with a modified transfer function that **checks** for KYC-SBT
+- send a **message** to the receiver using xmtp, ipfs, livepeer
+- **report** the encrypted transaction as an xmtp message and as a mina state
+- tellor and uma as **oracles**
 
 <span>
 <img src="https://github.com/devlyn37/eth-sf-complisend/raw/main/screenshots/Screen_Shot_2022-11-06_at_11.13.16_AM.png" width="240">
