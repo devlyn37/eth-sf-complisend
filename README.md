@@ -22,7 +22,7 @@ This project started at SF ETH Global hackathon
 - tellor and uma as oracles
 
 
-![send not verified](https://github.com/devlyn37/eth-sf-complisend/raw/main/screenshots/Screen_Shot_2022-11-06_at_11.13.16_AM.png width="100")
+<img src="https://github.com/devlyn37/eth-sf-complisend/raw/main/screenshots/Screen_Shot_2022-11-06_at_11.13.16_AM.png" width="100">
 ![receive verified](https://github.com/devlyn37/eth-sf-complisend/raw/main/screenshots/Screen_Shot_2022-11-06_at_11.14.29_AM.png)
 ![auditor](https://github.com/devlyn37/eth-sf-complisend/raw/main/screenshots/Screen_Shot_2022-11-06_at_11.15.38_AM.png)
 
