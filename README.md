@@ -9,7 +9,7 @@ This project started at SF ETH Global 2022 hackathon
 
 ## Features
 
-- transfer only if the recipient has KYC_SBT (non-transferable NFT with zk proof of identity that we built at eth NYC)
+- transfer only if the recipient has KYC_SBT (non-transferable NFT with zk proof of identity that we built at eth NYC [showcase](https://ethglobal.com/showcase/zk-kyc-sbt-ozwb2))
 - modified transfer function for ERC20 and ERC721
 - with the transfer, send notes (like Venmo), Photos, zkp, and videos
 - DAO voting with the transfer tokens
