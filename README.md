@@ -2,7 +2,7 @@
 
 KYC erc20/721 transfer with messaging and reporting to an auditor
 
-[eth-sf-complisend.vercel.app
+Demo: [eth-sf-complisend.vercel.app
 ](https://eth-sf-complisend.vercel.app/)
 
 This project started at SF ETH Global hackathon 
