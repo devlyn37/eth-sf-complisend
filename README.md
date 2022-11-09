@@ -2,6 +2,8 @@
 
 KYC erc20/721 transfer with messaging and reporting to an auditor
 
+<img src="https://github.com/devlyn37/eth-sf-complisend/raw/main/screenshots/sfeth22cover.png" width="360">
+
 Demo: [eth-sf-complisend.vercel.app
 ](https://eth-sf-complisend.vercel.app/)
 
